@@ -1,0 +1,444 @@
+/* ============================================================================
+   VIVEK SECURITY CORE - APPROVED COLOR SCHEME STYLESHEET
+   Pure Black Theme with Vibrant Gradient Icons
+   Status: ✓ APPROVED - Ready for Implementation
+   ============================================================================ */
+
+/* ============================================================================
+   BASE COLORS - Pure Black Theme
+   ============================================================================ */
+
+:root {
+    /* Background Colors */
+    --vsc-bg-darkest: #000000;      /* Main background - Pure black (OLED perfect) */
+    --vsc-bg-dark: #0a0a0a;         /* Cards, panels, sidebar */
+    --vsc-bg-medium: #1a1a1a;       /* Input fields, hover backgrounds */
+    --vsc-bg-light: #2a2a2a;        /* Active states, lighter elements */
+
+    /* Text Colors */
+    --vsc-text-primary: #ffffff;    /* Main text - Pure white */
+    --vsc-text-secondary: #cccccc;  /* Labels, secondary text */
+    --vsc-text-muted: #999999;      /* Hints, disabled text */
+
+    /* Border Colors */
+    --vsc-border: #1a1a1a;          /* Default borders */
+    --vsc-border-light: #2a2a2a;    /* Lighter borders */
+}
+
+/* ============================================================================
+   GRADIENT COLORS - Vibrant Icons with Glows
+   ============================================================================ */
+
+:root {
+    /* Primary Blue Gradient */
+    --vsc-primary-start: #3b82f6;
+    --vsc-primary-end: #1e40af;
+    --vsc-primary-gradient: linear-gradient(135deg, #3b82f6, #1e40af);
+
+    /* Success Green Gradient */
+    --vsc-success-start: #10b981;
+    --vsc-success-end: #059669;
+    --vsc-success-gradient: linear-gradient(135deg, #10b981, #059669);
+
+    /* Danger Red Gradient */
+    --vsc-danger-start: #ef4444;
+    --vsc-danger-end: #dc2626;
+    --vsc-danger-gradient: linear-gradient(135deg, #ef4444, #dc2626);
+
+    /* Warning Orange Gradient */
+    --vsc-warning-start: #f59e0b;
+    --vsc-warning-end: #d97706;
+    --vsc-warning-gradient: linear-gradient(135deg, #f59e0b, #d97706);
+
+    /* Info Cyan Gradient */
+    --vsc-info-start: #0ea5e9;
+    --vsc-info-end: #0284c7;
+    --vsc-info-gradient: linear-gradient(135deg, #0ea5e9, #0284c7);
+
+    /* Indigo Purple Gradient */
+    --vsc-indigo-start: #6366f1;
+    --vsc-indigo-end: #4f46e5;
+    --vsc-indigo-gradient: linear-gradient(135deg, #6366f1, #4f46e5);
+}
+
+/* ============================================================================
+   SHADOW VALUES
+   ============================================================================ */
+
+:root {
+    --vsc-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --vsc-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --vsc-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+    --vsc-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+}
+
+/* ============================================================================
+   BASE STYLES
+   ============================================================================ */
+
+body {
+    background-color: var(--vsc-bg-darkest);
+    color: var(--vsc-text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+}
+
+/* ============================================================================
+   GRADIENT ICON CLASSES
+   ============================================================================ */
+
+.vsc-icon-primary {
+    background: var(--vsc-primary-gradient);
+}
+
+.vsc-icon-success {
+    background: var(--vsc-success-gradient);
+}
+
+.vsc-icon-danger {
+    background: var(--vsc-danger-gradient);
+}
+
+.vsc-icon-warning {
+    background: var(--vsc-warning-gradient);
+}
+
+.vsc-icon-info {
+    background: var(--vsc-info-gradient);
+}
+
+.vsc-icon-indigo {
+    background: var(--vsc-indigo-gradient);
+}
+
+/* Hover effects for icons */
+.vsc-icon-primary:hover,
+.vsc-icon-success:hover,
+.vsc-icon-danger:hover,
+.vsc-icon-warning:hover,
+.vsc-icon-info:hover,
+.vsc-icon-indigo:hover {
+    transform: translateY(-5px);
+    transition: transform 0.3s ease;
+}
+
+/* ============================================================================
+   BUTTON STYLES
+   ============================================================================ */
+
+.vsc-btn {
+    padding: 12px 30px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.vsc-btn-primary {
+    background: var(--vsc-primary-gradient);
+    color: white;
+}
+
+.vsc-btn-primary:hover {
+    transform: translateY(-2px);
+}
+
+.vsc-btn-success {
+    background: var(--vsc-success-gradient);
+    color: white;
+}
+
+.vsc-btn-success:hover {
+    transform: translateY(-2px);
+}
+
+.vsc-btn-danger {
+    background: var(--vsc-danger-gradient);
+    color: white;
+}
+
+.vsc-btn-danger:hover {
+    transform: translateY(-2px);
+}
+
+.vsc-btn-outline {
+    background: transparent;
+    border: 2px solid var(--vsc-primary-start);
+    color: var(--vsc-primary-start);
+}
+
+.vsc-btn-outline:hover {
+    background: var(--vsc-primary-start);
+    color: white;
+}
+
+/* ============================================================================
+   CARD STYLES
+   ============================================================================ */
+
+.vsc-card {
+    background: var(--vsc-bg-dark);
+    border: 1px solid var(--vsc-border);
+    border-radius: 12px;
+    padding: 25px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.vsc-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--vsc-shadow-lg);
+}
+
+/* ============================================================================
+   ALERT STYLES
+   ============================================================================ */
+
+.vsc-alert {
+    padding: 15px 20px;
+    border-radius: 8px;
+    border-left: 4px solid;
+    margin-bottom: 15px;
+}
+
+.vsc-alert-success {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: var(--vsc-success-start);
+    color: var(--vsc-success-start);
+}
+
+.vsc-alert-warning {
+    background: rgba(245, 158, 11, 0.1);
+    border-color: var(--vsc-warning-start);
+    color: var(--vsc-warning-start);
+}
+
+.vsc-alert-danger {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: var(--vsc-danger-start);
+    color: var(--vsc-danger-start);
+}
+
+.vsc-alert-info {
+    background: rgba(14, 165, 233, 0.1);
+    border-color: var(--vsc-info-start);
+    color: var(--vsc-info-start);
+}
+
+/* ============================================================================
+   FORM ELEMENTS
+   ============================================================================ */
+
+.vsc-input {
+    width: 100%;
+    padding: 12px 15px;
+    background: var(--vsc-bg-medium);
+    border: 1px solid var(--vsc-border);
+    border-radius: 8px;
+    color: var(--vsc-text-primary);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.vsc-input:focus {
+    outline: none;
+    border-color: var(--vsc-primary-start);
+}
+
+.vsc-label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--vsc-text-secondary);
+    font-size: 0.9rem;
+}
+
+.vsc-textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px 15px;
+    background: var(--vsc-bg-medium);
+    border: 1px solid var(--vsc-border);
+    border-radius: 8px;
+    color: var(--vsc-text-primary);
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    transition: all 0.3s ease;
+}
+
+.vsc-textarea:focus {
+    outline: none;
+    border-color: var(--vsc-primary-start);
+}
+
+.vsc-select {
+    width: 100%;
+    padding: 12px 15px;
+    background: var(--vsc-bg-medium);
+    border: 1px solid var(--vsc-border);
+    border-radius: 8px;
+    color: var(--vsc-text-primary);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.vsc-select:focus {
+    outline: none;
+    border-color: var(--vsc-primary-start);
+}
+
+/* ============================================================================
+   SIDEBAR MENU
+   ============================================================================ */
+
+.vsc-menu-item {
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--vsc-text-secondary);
+}
+
+.vsc-menu-item:hover {
+    background: var(--vsc-bg-medium);
+    color: var(--vsc-text-primary);
+}
+
+.vsc-menu-item.active {
+    background: var(--vsc-primary-gradient);
+    color: white;
+}
+
+/* ============================================================================
+   ANIMATIONS - REMOVED FOR PERFORMANCE
+   ============================================================================ */
+
+/* No animations for optimal performance */
+
+/* ============================================================================
+   BADGE STYLES
+   ============================================================================ */
+
+.vsc-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.vsc-badge-primary {
+    background: var(--vsc-primary-gradient);
+    color: white;
+}
+
+.vsc-badge-success {
+    background: var(--vsc-success-gradient);
+    color: white;
+}
+
+.vsc-badge-danger {
+    background: var(--vsc-danger-gradient);
+    color: white;
+}
+
+.vsc-badge-warning {
+    background: var(--vsc-warning-gradient);
+    color: white;
+}
+
+/* ============================================================================
+   TABLE STYLES
+   ============================================================================ */
+
+.vsc-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--vsc-bg-dark);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.vsc-table thead {
+    background: var(--vsc-bg-medium);
+}
+
+.vsc-table th {
+    padding: 15px;
+    text-align: left;
+    color: var(--vsc-text-secondary);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.vsc-table td {
+    padding: 15px;
+    border-top: 1px solid var(--vsc-border);
+    color: var(--vsc-text-primary);
+}
+
+.vsc-table tbody tr:hover {
+    background: var(--vsc-bg-medium);
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+
+.vsc-text-gradient-primary {
+    background: var(--vsc-primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.vsc-text-gradient-success {
+    background: var(--vsc-success-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.vsc-text-gradient-indigo {
+    background: var(--vsc-indigo-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ============================================================================
+   RESPONSIVE BREAKPOINTS
+   ============================================================================ */
+
+/* Mobile */
+@media (max-width: 768px) {
+    .vsc-card {
+        padding: 20px;
+    }
+    
+    .vsc-btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Tablet */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .vsc-card {
+        padding: 22px;
+    }
+}
+
+/* Desktop */
+@media (min-width: 1025px) {
+    .vsc-card {
+        padding: 25px;
+    }
+}
+
+/* ============================================================================
+   END OF STYLESHEET
+   ============================================================================ */
