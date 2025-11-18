@@ -35,7 +35,8 @@ class VSC_Backup_Main_Controller {
 	 * @return VSC_Backup_Main_Controller
 	 */
 	public function __construct() {
-		register_activation_hook( VSC_BACKUP_PLUGIN_BASENAME, array( $this, 'activation_hook' ) );
+		// NOTE: Activation hook removed - setup functions run via admin_init hooks instead
+		// register_activation_hook() should not be called during admin_init
 
 		// Activate hooks
 		$this->activate_actions();
