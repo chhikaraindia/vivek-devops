@@ -14,3 +14,7 @@ refrence plugins/adminify-pro/
 zip*
 *.tmp
 *.temp
+
+# Diagnostic log files
+vivek-devops/backup-*.txt
+vivek-devops/diagnostic-log.txt

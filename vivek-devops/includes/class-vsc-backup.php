@@ -19,28 +19,48 @@ class VSC_Backup {
     }
 
     private function __construct() {
+        // Direct file logging (doesn't rely on WordPress)
+        $log_file = VSC_PATH . 'backup-constructor.txt';
+
         error_log('VSC Backup: Constructor called');
+        @file_put_contents($log_file, date('Y-m-d H:i:s') . " - Constructor called\n", FILE_APPEND);
 
         try {
             error_log('VSC Backup: Defining constants');
+            @file_put_contents($log_file, date('Y-m-d H:i:s') . " - Defining constants\n", FILE_APPEND);
             $this->define_constants();
             error_log('VSC Backup: Constants defined');
+            @file_put_contents($log_file, date('Y-m-d H:i:s') . " - Constants defined\n", FILE_APPEND);
 
             error_log('VSC Backup: Loading dependencies');
+            @file_put_contents($log_file, date('Y-m-d H:i:s') . " - Loading dependencies\n", FILE_APPEND);
             $this->load_dependencies();
             error_log('VSC Backup: Dependencies loaded');
+            @file_put_contents($log_file, date('Y-m-d H:i:s') . " - Dependencies loaded\n", FILE_APPEND);
 
             error_log('VSC Backup: Initializing hooks');
+            @file_put_contents($log_file, date('Y-m-d H:i:s') . " - Initializing hooks\n", FILE_APPEND);
             $this->init_hooks();
             error_log('VSC Backup: Hooks initialized');
+            @file_put_contents($log_file, date('Y-m-d H:i:s') . " - Hooks initialized\n", FILE_APPEND);
 
             error_log('VSC Backup: Constructor completed successfully');
+            @file_put_contents($log_file, date('Y-m-d H:i:s') . " - SUCCESS: Constructor completed\n", FILE_APPEND);
         } catch (Throwable $e) {
             error_log('VSC Backup FATAL ERROR in constructor:');
             error_log('  Message: ' . $e->getMessage());
             error_log('  File: ' . $e->getFile());
             error_log('  Line: ' . $e->getLine());
             error_log('  Trace: ' . $e->getTraceAsString());
+
+            // Write to direct file log
+            $error_msg = date('Y-m-d H:i:s') . " - FATAL ERROR in constructor\n";
+            $error_msg .= "Message: " . $e->getMessage() . "\n";
+            $error_msg .= "File: " . $e->getFile() . "\n";
+            $error_msg .= "Line: " . $e->getLine() . "\n";
+            $error_msg .= "Trace: " . $e->getTraceAsString() . "\n\n";
+            @file_put_contents($log_file, $error_msg, FILE_APPEND);
+
             throw $e; // Re-throw to be caught by main plugin
         }
     }
