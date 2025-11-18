@@ -40,11 +40,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</span>
 			</div>
 			<ul class="ai1wm-dropdown-menu ai1wm-export-providers">
-				<?php foreach ( apply_filters( 'vsc_backup_export_buttons', array() ) as $button ) : ?>
+				<?php
+				$buttons = apply_filters( 'vsc_backup_export_buttons', array() );
+				if (empty($buttons)) {
+					// Fallback: Add file export button directly
+					echo '<li><a href="#" id="ai1wm-export-file">File</a></li>';
+				} else {
+					foreach ( $buttons as $button ) :
+				?>
 					<li>
 						<?php echo $button; ?>
 					</li>
-				<?php endforeach; ?>
+				<?php
+					endforeach;
+				}
+				?>
 			</ul>
 		</div>
 	</div>

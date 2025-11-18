@@ -48,11 +48,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 						</span>
 					</div>
 					<ul class="ai1wm-dropdown-menu ai1wm-import-providers">
-						<?php foreach ( apply_filters( 'vsc_backup_import_buttons', array() ) as $button ) : ?>
+						<?php
+						$buttons = apply_filters( 'vsc_backup_import_buttons', array() );
+						if (empty($buttons)) {
+							// Fallback: Add file import button directly
+							?>
+							<li>
+								<label id="ai1wm-import-file" for="ai1wm-select-file">
+									<i class="ai1wm-icon-file"></i> File
+									<input id="ai1wm-select-file" type="file" name="file" style="display:none;">
+								</label>
+							</li>
+							<?php
+						} else {
+							foreach ( $buttons as $button ) :
+						?>
 							<li>
 								<?php echo $button; ?>
 							</li>
-						<?php endforeach; ?>
+						<?php
+							endforeach;
+						}
+						?>
 					</ul>
 				</div>
 			</div>
