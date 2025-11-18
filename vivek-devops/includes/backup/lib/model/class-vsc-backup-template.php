@@ -48,7 +48,7 @@ class VSC_Backup_Template extends Bandar {
 	 * @param  string $prefix Asset prefix
 	 * @return string         Asset URL
 	 */
-	public static function asset_link( $asset, $prefix = 'AI1WM' ) {
+	public static function asset_link( $asset, $prefix = 'VSC_BACKUP' ) {
 		return constant( $prefix . '_URL' ) . '/lib/view/assets/' . $asset . '?v=' . constant( $prefix . '_VERSION' );
 	}
 
