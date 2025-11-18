@@ -70,26 +70,41 @@ class VSC_Backup {
      * Load all backup dependencies
      */
     private function load_dependencies() {
-        // Load constants
-        require_once VSC_BACKUP_PATH . '/constants.php';
+        // Wrap in try-catch for safe loading
+        try {
+            // Load constants
+            require_once VSC_BACKUP_PATH . '/constants.php';
 
-        // Load exceptions
-        require_once VSC_BACKUP_PATH . '/exceptions.php';
+            // Load exceptions
+            require_once VSC_BACKUP_PATH . '/exceptions.php';
 
-        // Load helper functions
-        require_once VSC_BACKUP_PATH . '/functions.php';
+            // Load helper functions
+            require_once VSC_BACKUP_PATH . '/functions.php';
 
-        // Load vendor libraries (filesystem, archiver, database)
-        $this->load_vendor_files();
+            // Load vendor libraries (filesystem, archiver, database)
+            $this->load_vendor_files();
 
-        // Load models
-        $this->load_model_files();
+            // Load models
+            $this->load_model_files();
 
-        // Load controllers
-        $this->load_controller_files();
+            // Load controllers
+            $this->load_controller_files();
 
-        // Initialize main controller
-        new VSC_Backup_Main_Controller();
+            // Initialize main controller only after admin_init
+            add_action('admin_init', array($this, 'init_main_controller'), 5);
+        } catch (Exception $e) {
+            // Log error but don't break the plugin
+            error_log('VSC Backup Error: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Initialize main controller after WordPress is fully loaded
+     */
+    public function init_main_controller() {
+        if (class_exists('VSC_Backup_Main_Controller')) {
+            new VSC_Backup_Main_Controller();
+        }
     }
 
     /**
@@ -99,35 +114,48 @@ class VSC_Backup {
         $vendor_path = VSC_BACKUP_LIB_PATH . '/vendor';
 
         // Bandar templating
-        require_once $vendor_path . '/bandar/bandar/lib/Bandar.php';
+        if (file_exists($vendor_path . '/bandar/bandar/lib/Bandar.php')) {
+            require_once $vendor_path . '/bandar/bandar/lib/Bandar.php';
+        }
 
         // Filesystem
-        require_once $vendor_path . '/servmask/filesystem/class-vsc-backup-file.php';
-        require_once $vendor_path . '/servmask/filesystem/class-vsc-backup-directory.php';
-        require_once $vendor_path . '/servmask/filesystem/class-vsc-backup-file-htaccess.php';
-        require_once $vendor_path . '/servmask/filesystem/class-vsc-backup-file-index.php';
-        require_once $vendor_path . '/servmask/filesystem/class-vsc-backup-file-robots.php';
-        require_once $vendor_path . '/servmask/filesystem/class-vsc-backup-file-webconfig.php';
+        $this->require_if_exists($vendor_path . '/servmask/filesystem/class-vsc-backup-file.php');
+        $this->require_if_exists($vendor_path . '/servmask/filesystem/class-vsc-backup-directory.php');
+        $this->require_if_exists($vendor_path . '/servmask/filesystem/class-vsc-backup-file-htaccess.php');
+        $this->require_if_exists($vendor_path . '/servmask/filesystem/class-vsc-backup-file-index.php');
+        $this->require_if_exists($vendor_path . '/servmask/filesystem/class-vsc-backup-file-robots.php');
+        $this->require_if_exists($vendor_path . '/servmask/filesystem/class-vsc-backup-file-webconfig.php');
 
         // Database
-        require_once $vendor_path . '/servmask/database/class-vsc-backup-database.php';
-        require_once $vendor_path . '/servmask/database/class-vsc-backup-database-utility.php';
-        require_once $vendor_path . '/servmask/database/class-vsc-backup-database-mysql.php';
-        require_once $vendor_path . '/servmask/database/class-vsc-backup-database-mysqli.php';
+        $this->require_if_exists($vendor_path . '/servmask/database/class-vsc-backup-database.php');
+        $this->require_if_exists($vendor_path . '/servmask/database/class-vsc-backup-database-utility.php');
+        $this->require_if_exists($vendor_path . '/servmask/database/class-vsc-backup-database-mysql.php');
+        $this->require_if_exists($vendor_path . '/servmask/database/class-vsc-backup-database-mysqli.php');
 
         // Archiver (compression/extraction)
-        require_once $vendor_path . '/servmask/archiver/class-vsc-backup-archiver.php';
-        require_once $vendor_path . '/servmask/archiver/class-vsc-backup-compressor.php';
-        require_once $vendor_path . '/servmask/archiver/class-vsc-backup-extractor.php';
+        $this->require_if_exists($vendor_path . '/servmask/archiver/class-vsc-backup-archiver.php');
+        $this->require_if_exists($vendor_path . '/servmask/archiver/class-vsc-backup-compressor.php');
+        $this->require_if_exists($vendor_path . '/servmask/archiver/class-vsc-backup-extractor.php');
 
         // Iterators and filters
-        require_once $vendor_path . '/servmask/iterator/class-vsc-backup-recursive-directory-iterator.php';
-        require_once $vendor_path . '/servmask/iterator/class-vsc-backup-recursive-iterator-iterator.php';
-        require_once $vendor_path . '/servmask/filter/class-vsc-backup-recursive-exclude-filter.php';
-        require_once $vendor_path . '/servmask/filter/class-vsc-backup-recursive-extension-filter.php';
+        $this->require_if_exists($vendor_path . '/servmask/iterator/class-vsc-backup-recursive-directory-iterator.php');
+        $this->require_if_exists($vendor_path . '/servmask/iterator/class-vsc-backup-recursive-iterator-iterator.php');
+        $this->require_if_exists($vendor_path . '/servmask/filter/class-vsc-backup-recursive-exclude-filter.php');
+        $this->require_if_exists($vendor_path . '/servmask/filter/class-vsc-backup-recursive-extension-filter.php');
 
         // Cron
-        require_once $vendor_path . '/servmask/cron/class-vsc-backup-cron.php';
+        $this->require_if_exists($vendor_path . '/servmask/cron/class-vsc-backup-cron.php');
+    }
+
+    /**
+     * Require file if it exists
+     */
+    private function require_if_exists($file) {
+        if (file_exists($file)) {
+            require_once $file;
+        } else {
+            error_log('VSC Backup: Missing file - ' . $file);
+        }
     }
 
     /**
@@ -137,24 +165,30 @@ class VSC_Backup {
         $model_path = VSC_BACKUP_LIB_PATH . '/model';
 
         // Core models
-        require_once $model_path . '/class-vsc-backup-template.php';
-        require_once $model_path . '/class-vsc-backup-extensions.php';
-        require_once $model_path . '/class-vsc-backup-log.php';
-        require_once $model_path . '/class-vsc-backup-status.php';
-        require_once $model_path . '/class-vsc-backup-notification.php';
-        require_once $model_path . '/class-vsc-backup-message.php';
-        require_once $model_path . '/class-vsc-backup-backups.php';
-        require_once $model_path . '/class-vsc-backup-compatibility.php';
-        require_once $model_path . '/class-vsc-backup-handler.php';
+        $this->require_if_exists($model_path . '/class-vsc-backup-template.php');
+        $this->require_if_exists($model_path . '/class-vsc-backup-extensions.php');
+        $this->require_if_exists($model_path . '/class-vsc-backup-log.php');
+        $this->require_if_exists($model_path . '/class-vsc-backup-status.php');
+        $this->require_if_exists($model_path . '/class-vsc-backup-notification.php');
+        $this->require_if_exists($model_path . '/class-vsc-backup-message.php');
+        $this->require_if_exists($model_path . '/class-vsc-backup-backups.php');
+        $this->require_if_exists($model_path . '/class-vsc-backup-compatibility.php');
+        $this->require_if_exists($model_path . '/class-vsc-backup-handler.php');
 
         // Export models
-        foreach (glob($model_path . '/export/class-vsc-backup-export-*.php') as $file) {
-            require_once $file;
+        $export_files = glob($model_path . '/export/class-vsc-backup-export-*.php');
+        if ($export_files) {
+            foreach ($export_files as $file) {
+                $this->require_if_exists($file);
+            }
         }
 
         // Import models
-        foreach (glob($model_path . '/import/class-vsc-backup-import-*.php') as $file) {
-            require_once $file;
+        $import_files = glob($model_path . '/import/class-vsc-backup-import-*.php');
+        if ($import_files) {
+            foreach ($import_files as $file) {
+                $this->require_if_exists($file);
+            }
         }
     }
 
@@ -164,8 +198,11 @@ class VSC_Backup {
     private function load_controller_files() {
         $controller_path = VSC_BACKUP_LIB_PATH . '/controller';
 
-        foreach (glob($controller_path . '/class-vsc-backup-*-controller.php') as $file) {
-            require_once $file;
+        $controller_files = glob($controller_path . '/class-vsc-backup-*-controller.php');
+        if ($controller_files) {
+            foreach ($controller_files as $file) {
+                $this->require_if_exists($file);
+            }
         }
     }
 
