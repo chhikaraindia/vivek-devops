@@ -754,6 +754,11 @@ class VSC_Backup_Main_Controller {
 		// We don't want auth check for monitoring whether the user is still logged in
 		remove_action( 'admin_enqueue_scripts', 'wp_auth_check_load' );
 
+		// Enqueue base styles and scripts first
+		wp_enqueue_style( 'vsc_backup_servmask' );
+		wp_enqueue_script( 'vsc_backup_util' );
+		wp_enqueue_script( 'vsc_backup_settings' );
+
 		if ( is_rtl() ) {
 			wp_enqueue_style(
 				'vsc_backup_export',
@@ -834,6 +839,11 @@ class VSC_Backup_Main_Controller {
 
 		// We don't want heartbeat to occur when importing
 		wp_deregister_script( 'heartbeat' );
+
+		// Enqueue base styles and scripts first
+		wp_enqueue_style( 'vsc_backup_servmask' );
+		wp_enqueue_script( 'vsc_backup_util' );
+		wp_enqueue_script( 'vsc_backup_settings' );
 
 		// We don't want auth check for monitoring whether the user is still logged in
 		remove_action( 'admin_enqueue_scripts', 'wp_auth_check_load' );
@@ -995,6 +1005,11 @@ class VSC_Backup_Main_Controller {
 
 		// We don't want heartbeat to occur when restoring
 		wp_deregister_script( 'heartbeat' );
+
+		// Enqueue base styles and scripts first
+		wp_enqueue_style( 'vsc_backup_servmask' );
+		wp_enqueue_script( 'vsc_backup_util' );
+		wp_enqueue_script( 'vsc_backup_settings' );
 
 		// We don't want auth check for monitoring whether the user is still logged in
 		remove_action( 'admin_enqueue_scripts', 'wp_auth_check_load' );
