@@ -4,3 +4,8 @@ admin-site-enhancements-pro.zip
 
 # Temporary extraction directories
 vivek-devops-current/
+
+# Extracted reference plugins for analysis
+refrence plugins/all-in-one-wp-migration/
+refrence plugins/all-in-one-wp-migration-unlimited-extension/
+refrence plugins/adminify-pro/
