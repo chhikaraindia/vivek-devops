@@ -31,6 +31,9 @@ class VSC_Backup {
         // Plugin version (matches VSC version)
         define('VSC_BACKUP_VERSION', VSC_VERSION);
 
+        // Plugin basename (for WordPress hooks)
+        define('VSC_BACKUP_PLUGIN_BASENAME', plugin_basename(VSC_PATH . 'vivek-devops.php'));
+
         // Backup module paths
         define('VSC_BACKUP_PATH', VSC_PATH . 'includes/backup');
         define('VSC_BACKUP_LIB_PATH', VSC_BACKUP_PATH . '/lib');
