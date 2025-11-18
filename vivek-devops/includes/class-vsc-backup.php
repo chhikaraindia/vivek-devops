@@ -286,5 +286,4 @@ class VSC_Backup {
     }
 }
 
-// Initialize VSC Backup
-VSC_Backup::get_instance();
+// Backup module will be initialized by main plugin file

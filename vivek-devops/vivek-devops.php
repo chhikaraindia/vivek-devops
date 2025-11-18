@@ -37,7 +37,7 @@ function vsc_init() {
     VSC_Dashboard::get_instance();
     VSC_Snippets::get_instance();
     VSC_Color_Scheme::get_instance();
-    // Backup module initializes itself
+    VSC_Backup::get_instance();
 
     // Enqueue admin styles
     add_action('admin_enqueue_scripts', 'vsc_enqueue_styles');
