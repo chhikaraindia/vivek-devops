@@ -19,9 +19,30 @@ class VSC_Backup {
     }
 
     private function __construct() {
-        $this->define_constants();
-        $this->load_dependencies();
-        $this->init_hooks();
+        error_log('VSC Backup: Constructor called');
+
+        try {
+            error_log('VSC Backup: Defining constants');
+            $this->define_constants();
+            error_log('VSC Backup: Constants defined');
+
+            error_log('VSC Backup: Loading dependencies');
+            $this->load_dependencies();
+            error_log('VSC Backup: Dependencies loaded');
+
+            error_log('VSC Backup: Initializing hooks');
+            $this->init_hooks();
+            error_log('VSC Backup: Hooks initialized');
+
+            error_log('VSC Backup: Constructor completed successfully');
+        } catch (Throwable $e) {
+            error_log('VSC Backup FATAL ERROR in constructor:');
+            error_log('  Message: ' . $e->getMessage());
+            error_log('  File: ' . $e->getFile());
+            error_log('  Line: ' . $e->getLine());
+            error_log('  Trace: ' . $e->getTraceAsString());
+            throw $e; // Re-throw to be caught by main plugin
+        }
     }
 
     /**
@@ -76,32 +97,57 @@ class VSC_Backup {
     private function load_dependencies() {
         // Wrap in try-catch for safe loading
         try {
+            error_log('VSC Backup: Starting load_dependencies()');
+
             // Load constants
+            error_log('VSC Backup: Loading constants.php');
             require_once VSC_BACKUP_PATH . '/constants.php';
+            error_log('VSC Backup: Constants loaded successfully');
 
             // Load exceptions
+            error_log('VSC Backup: Loading exceptions.php');
             require_once VSC_BACKUP_PATH . '/exceptions.php';
+            error_log('VSC Backup: Exceptions loaded successfully');
 
             // Load helper functions
+            error_log('VSC Backup: Loading functions.php');
             require_once VSC_BACKUP_PATH . '/functions.php';
+            error_log('VSC Backup: Functions loaded successfully');
 
             // Load vendor libraries (filesystem, archiver, database)
+            error_log('VSC Backup: Loading vendor files');
             $this->load_vendor_files();
+            error_log('VSC Backup: Vendor files loaded successfully');
 
             // Load models
+            error_log('VSC Backup: Loading model files');
             $this->load_model_files();
+            error_log('VSC Backup: Model files loaded successfully');
 
             // Load controllers
+            error_log('VSC Backup: Loading controller files');
             $this->load_controller_files();
+            error_log('VSC Backup: Controller files loaded successfully');
 
             // Initialize main controller immediately
             // (Not delayed - it needs to register its hooks before admin_init fires)
+            error_log('VSC Backup: Checking for VSC_Backup_Main_Controller class');
             if (class_exists('VSC_Backup_Main_Controller')) {
+                error_log('VSC Backup: Instantiating VSC_Backup_Main_Controller');
                 new VSC_Backup_Main_Controller();
+                error_log('VSC Backup: Main controller instantiated successfully');
+            } else {
+                error_log('VSC Backup ERROR: VSC_Backup_Main_Controller class not found!');
             }
-        } catch (Exception $e) {
-            // Log error but don't break the plugin
-            error_log('VSC Backup Error: ' . $e->getMessage());
+
+            error_log('VSC Backup: load_dependencies() completed successfully');
+        } catch (Throwable $e) {
+            // Log detailed error information
+            error_log('VSC Backup CRITICAL ERROR in load_dependencies():');
+            error_log('  Message: ' . $e->getMessage());
+            error_log('  File: ' . $e->getFile());
+            error_log('  Line: ' . $e->getLine());
+            error_log('  Trace: ' . $e->getTraceAsString());
         }
     }
 

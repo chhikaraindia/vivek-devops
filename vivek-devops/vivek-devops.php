@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Vivek DevOps
  * Description: Vivek DevOps is a comprehensive DevSecOps suite for developers, crafted to transform backend management into a streamlined, secure, and developer-centric experience. It integrates security enforcement, custom branding, UI customization, user access policies, and critical infrastructure tooling into a single lightweight framework.
- * Version: 30.7
+ * Version: 30.8
  * Author: Vivek Chhikara
  * Author URI: https://vivekchhikara.com
  */
@@ -10,7 +10,7 @@
 if (!defined('ABSPATH')) exit;
 
 // Plugin version
-define('VSC_VERSION', '30.7');
+define('VSC_VERSION', '30.8');
 define('VSC_NAME', 'Vivek DevOps');
 define('VSC_PATH', plugin_dir_path(__FILE__));
 define('VSC_URL', plugin_dir_url(__FILE__));
@@ -44,12 +44,20 @@ function vsc_init() {
 
     // Initialize backup module if available
     if (class_exists('VSC_Backup')) {
+        error_log('VSC Backup: Class found, initializing...');
         try {
             VSC_Backup::get_instance();
-        } catch (Exception $e) {
+            error_log('VSC Backup: Initialized successfully');
+        } catch (Throwable $e) {
             // Backup module failed - log but continue
-            error_log('VSC Backup initialization failed: ' . $e->getMessage());
+            error_log('VSC Backup INITIALIZATION FAILED:');
+            error_log('  Message: ' . $e->getMessage());
+            error_log('  File: ' . $e->getFile());
+            error_log('  Line: ' . $e->getLine());
+            error_log('  Stack trace: ' . $e->getTraceAsString());
         }
+    } else {
+        error_log('VSC Backup: Class NOT found - backup module not loaded');
     }
 
     // Enqueue admin styles
