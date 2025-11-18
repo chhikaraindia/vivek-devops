@@ -288,31 +288,45 @@ class VSC_Backup {
      * Setup storage folders
      */
     public function setup_storage() {
-        // Create backups directory
-        if (!file_exists(VSC_BACKUP_BACKUPS_PATH)) {
-            wp_mkdir_p(VSC_BACKUP_BACKUPS_PATH);
-        }
+        $log_file = VSC_PATH . 'backup-runtime.txt';
+        @file_put_contents($log_file, date('Y-m-d H:i:s') . " - setup_storage() called\n", FILE_APPEND);
 
-        // Create storage directory
-        if (!file_exists(VSC_BACKUP_STORAGE_PATH)) {
-            wp_mkdir_p(VSC_BACKUP_STORAGE_PATH);
-        }
+        try {
+            // Create backups directory
+            if (!file_exists(VSC_BACKUP_BACKUPS_PATH)) {
+                wp_mkdir_p(VSC_BACKUP_BACKUPS_PATH);
+            }
 
-        // Protect storage with .htaccess
-        $htaccess_file = VSC_BACKUP_BACKUPS_PATH . '/.htaccess';
-        if (!file_exists($htaccess_file)) {
-            file_put_contents($htaccess_file, 'deny from all');
-        }
+            // Create storage directory
+            if (!file_exists(VSC_BACKUP_STORAGE_PATH)) {
+                wp_mkdir_p(VSC_BACKUP_STORAGE_PATH);
+            }
 
-        // Protect storage with index.php
-        $index_file = VSC_BACKUP_BACKUPS_PATH . '/index.php';
-        if (!file_exists($index_file)) {
-            file_put_contents($index_file, '<?php // Silence is golden');
-        }
+            // Protect storage with .htaccess
+            $htaccess_file = VSC_BACKUP_BACKUPS_PATH . '/.htaccess';
+            if (!file_exists($htaccess_file)) {
+                file_put_contents($htaccess_file, 'deny from all');
+            }
 
-        // Generate secret key if not exists
-        if (!get_option(VSC_BACKUP_SECRET_KEY)) {
-            update_option(VSC_BACKUP_SECRET_KEY, wp_generate_password(32, true, true));
+            // Protect storage with index.php
+            $index_file = VSC_BACKUP_BACKUPS_PATH . '/index.php';
+            if (!file_exists($index_file)) {
+                file_put_contents($index_file, '<?php // Silence is golden');
+            }
+
+            // Generate secret key if not exists
+            if (!get_option(VSC_BACKUP_SECRET_KEY)) {
+                update_option(VSC_BACKUP_SECRET_KEY, wp_generate_password(32, true, true));
+            }
+
+            @file_put_contents($log_file, date('Y-m-d H:i:s') . " - setup_storage() completed successfully\n", FILE_APPEND);
+        } catch (Throwable $e) {
+            $error_msg = date('Y-m-d H:i:s') . " - setup_storage() ERROR\n";
+            $error_msg .= "Message: " . $e->getMessage() . "\n";
+            $error_msg .= "File: " . $e->getFile() . "\n";
+            $error_msg .= "Line: " . $e->getLine() . "\n";
+            $error_msg .= "Trace: " . $e->getTraceAsString() . "\n\n";
+            @file_put_contents($log_file, $error_msg, FILE_APPEND);
         }
     }
 
@@ -320,70 +334,111 @@ class VSC_Backup {
      * Add backup menu to VSC Dashboard
      */
     public function add_menu() {
-        add_submenu_page(
-            'vsc-dashboard',
-            'Backup and Restore',
-            'Backup and Restore',
-            'manage_options',
-            'vsc-backup',
-            array($this, 'render_backup_page')
-        );
+        $log_file = VSC_PATH . 'backup-runtime.txt';
+        @file_put_contents($log_file, date('Y-m-d H:i:s') . " - add_menu() called\n", FILE_APPEND);
+
+        try {
+            add_submenu_page(
+                'vsc-dashboard',
+                'Backup and Restore',
+                'Backup and Restore',
+                'manage_options',
+                'vsc-backup',
+                array($this, 'render_backup_page')
+            );
+            @file_put_contents($log_file, date('Y-m-d H:i:s') . " - add_menu() completed successfully\n", FILE_APPEND);
+        } catch (Throwable $e) {
+            $error_msg = date('Y-m-d H:i:s') . " - add_menu() ERROR\n";
+            $error_msg .= "Message: " . $e->getMessage() . "\n";
+            $error_msg .= "File: " . $e->getFile() . "\n";
+            $error_msg .= "Line: " . $e->getLine() . "\n";
+            $error_msg .= "Trace: " . $e->getTraceAsString() . "\n\n";
+            @file_put_contents($log_file, $error_msg, FILE_APPEND);
+        }
     }
 
     /**
      * Render backup page (tabs for export/import/backups)
      */
     public function render_backup_page() {
-        $tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'export';
+        $log_file = VSC_PATH . 'backup-runtime.txt';
+        @file_put_contents($log_file, date('Y-m-d H:i:s') . " - render_backup_page() called\n", FILE_APPEND);
 
-        ?>
-        <div class="wrap vsc-backup-wrap">
-            <h1>🔄 VSC Backup & Restore</h1>
+        try {
+            $tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'export';
 
-            <nav class="nav-tab-wrapper">
-                <a href="?page=vsc-backup&tab=export" class="nav-tab <?php echo $tab === 'export' ? 'nav-tab-active' : ''; ?>">
-                    Export Site
-                </a>
-                <a href="?page=vsc-backup&tab=import" class="nav-tab <?php echo $tab === 'import' ? 'nav-tab-active' : ''; ?>">
-                    Import Site
-                </a>
-                <a href="?page=vsc-backup&tab=backups" class="nav-tab <?php echo $tab === 'backups' ? 'nav-tab-active' : ''; ?>">
-                    Manage Backups
-                </a>
-            </nav>
+            ?>
+            <div class="wrap vsc-backup-wrap">
+                <h1>🔄 VSC Backup & Restore</h1>
 
-            <div class="vsc-backup-tab-content">
-                <?php
-                switch ($tab) {
-                    case 'import':
-                        VSC_Backup_Import_Controller::index();
-                        break;
-                    case 'backups':
-                        VSC_Backup_Backups_Controller::index();
-                        break;
-                    case 'export':
-                    default:
-                        VSC_Backup_Export_Controller::index();
-                        break;
-                }
-                ?>
+                <nav class="nav-tab-wrapper">
+                    <a href="?page=vsc-backup&tab=export" class="nav-tab <?php echo $tab === 'export' ? 'nav-tab-active' : ''; ?>">
+                        Export Site
+                    </a>
+                    <a href="?page=vsc-backup&tab=import" class="nav-tab <?php echo $tab === 'import' ? 'nav-tab-active' : ''; ?>">
+                        Import Site
+                    </a>
+                    <a href="?page=vsc-backup&tab=backups" class="nav-tab <?php echo $tab === 'backups' ? 'nav-tab-active' : ''; ?>">
+                        Manage Backups
+                    </a>
+                </nav>
+
+                <div class="vsc-backup-tab-content">
+                    <?php
+                    switch ($tab) {
+                        case 'import':
+                            VSC_Backup_Import_Controller::index();
+                            break;
+                        case 'backups':
+                            VSC_Backup_Backups_Controller::index();
+                            break;
+                        case 'export':
+                        default:
+                            VSC_Backup_Export_Controller::index();
+                            break;
+                    }
+                    ?>
+                </div>
             </div>
-        </div>
-        <?php
+            <?php
+            @file_put_contents($log_file, date('Y-m-d H:i:s') . " - render_backup_page() completed successfully\n", FILE_APPEND);
+        } catch (Throwable $e) {
+            $error_msg = date('Y-m-d H:i:s') . " - render_backup_page() ERROR\n";
+            $error_msg .= "Message: " . $e->getMessage() . "\n";
+            $error_msg .= "File: " . $e->getFile() . "\n";
+            $error_msg .= "Line: " . $e->getLine() . "\n";
+            $error_msg .= "Trace: " . $e->getTraceAsString() . "\n\n";
+            @file_put_contents($log_file, $error_msg, FILE_APPEND);
+
+            echo '<div class="wrap"><h1>VSC Backup Error</h1><p>An error occurred. Check backup-runtime.txt for details.</p></div>';
+        }
     }
 
     /**
      * Enqueue backup assets
      */
     public function enqueue_assets($hook) {
-        if ($hook !== 'vivek-devops_page_vsc-backup') {
-            return;
+        $log_file = VSC_PATH . 'backup-runtime.txt';
+        @file_put_contents($log_file, date('Y-m-d H:i:s') . " - enqueue_assets() called (hook: $hook)\n", FILE_APPEND);
+
+        try {
+            if ($hook !== 'vivek-devops_page_vsc-backup') {
+                return;
+            }
+
+            // Enqueue WordPress media library
+            wp_enqueue_media();
+
+            // Will add CSS/JS here later
+            @file_put_contents($log_file, date('Y-m-d H:i:s') . " - enqueue_assets() completed successfully\n", FILE_APPEND);
+        } catch (Throwable $e) {
+            $error_msg = date('Y-m-d H:i:s') . " - enqueue_assets() ERROR\n";
+            $error_msg .= "Message: " . $e->getMessage() . "\n";
+            $error_msg .= "File: " . $e->getFile() . "\n";
+            $error_msg .= "Line: " . $e->getLine() . "\n";
+            $error_msg .= "Trace: " . $e->getTraceAsString() . "\n\n";
+            @file_put_contents($log_file, $error_msg, FILE_APPEND);
         }
-
-        // Enqueue WordPress media library
-        wp_enqueue_media();
-
-        // Will add CSS/JS here later
     }
 }
 

@@ -18,3 +18,4 @@ zip*
 # Diagnostic log files
 vivek-devops/backup-*.txt
 vivek-devops/diagnostic-log.txt
+vivek-devops/backup-runtime.txt

@@ -35,12 +35,31 @@ class VSC_Backup_Main_Controller {
 	 * @return VSC_Backup_Main_Controller
 	 */
 	public function __construct() {
-		// NOTE: Activation hook removed - setup functions run via admin_init hooks instead
-		// register_activation_hook() should not be called during admin_init
+		$log_file = VSC_PATH . 'backup-runtime.txt';
+		@file_put_contents($log_file, date('Y-m-d H:i:s') . " - VSC_Backup_Main_Controller::__construct() called\n", FILE_APPEND);
 
-		// Activate hooks
-		$this->activate_actions();
-		$this->activate_filters();
+		try {
+			// NOTE: Activation hook removed - setup functions run via admin_init hooks instead
+			// register_activation_hook() should not be called during admin_init
+
+			// Activate hooks
+			@file_put_contents($log_file, date('Y-m-d H:i:s') . " - Activating actions...\n", FILE_APPEND);
+			$this->activate_actions();
+			@file_put_contents($log_file, date('Y-m-d H:i:s') . " - Actions activated\n", FILE_APPEND);
+
+			@file_put_contents($log_file, date('Y-m-d H:i:s') . " - Activating filters...\n", FILE_APPEND);
+			$this->activate_filters();
+			@file_put_contents($log_file, date('Y-m-d H:i:s') . " - Filters activated\n", FILE_APPEND);
+
+			@file_put_contents($log_file, date('Y-m-d H:i:s') . " - Main controller constructed successfully\n", FILE_APPEND);
+		} catch (Throwable $e) {
+			$error_msg = date('Y-m-d H:i:s') . " - Main Controller Constructor ERROR\n";
+			$error_msg .= "Message: " . $e->getMessage() . "\n";
+			$error_msg .= "File: " . $e->getFile() . "\n";
+			$error_msg .= "Line: " . $e->getLine() . "\n";
+			$error_msg .= "Trace: " . $e->getTraceAsString() . "\n\n";
+			@file_put_contents($log_file, $error_msg, FILE_APPEND);
+		}
 	}
 
 	/**

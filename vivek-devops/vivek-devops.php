@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Vivek DevOps
  * Description: Vivek DevOps is a comprehensive DevSecOps suite for developers, crafted to transform backend management into a streamlined, secure, and developer-centric experience. It integrates security enforcement, custom branding, UI customization, user access policies, and critical infrastructure tooling into a single lightweight framework.
- * Version: 30.9
+ * Version: 30.10
  * Author: Vivek Chhikara
  * Author URI: https://vivekchhikara.com
  */
@@ -10,7 +10,7 @@
 if (!defined('ABSPATH')) exit;
 
 // Plugin version
-define('VSC_VERSION', '30.9');
+define('VSC_VERSION', '30.10');
 define('VSC_NAME', 'Vivek DevOps');
 define('VSC_PATH', plugin_dir_path(__FILE__));
 define('VSC_URL', plugin_dir_url(__FILE__));
