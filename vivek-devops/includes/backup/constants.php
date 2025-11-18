@@ -29,6 +29,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // NOTE: Base constants (VSC_BACKUP_PATH, VSC_BACKUP_VERSION, etc.) are defined in class-vsc-backup.php
 
+// =================
+// = Plugin Name   =
+// =================
+if (!defined('VSC_BACKUP_PLUGIN_NAME')) {
+	define( 'VSC_BACKUP_PLUGIN_NAME', 'vsc-backup' );
+}
+
 // ==================
 // = Error Log Path =
 // ==================

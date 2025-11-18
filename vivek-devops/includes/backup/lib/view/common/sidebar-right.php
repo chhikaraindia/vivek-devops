@@ -32,12 +32,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="ai1wm-sidebar">
 		<div class="ai1wm-segment">
 
-			<?php if ( ! VSC_BACKUP_DEBUG ) : ?>
-				<?php include VSC_BACKUP_TEMPLATES_PATH . '/common/share-buttons.php'; ?>
-			<?php endif; ?>
+			<?php /* Social media sharing removed - not needed for internal tool */ ?>
 
-			<h2><?php _e( 'Leave Feedback', VSC_BACKUP_PLUGIN_NAME ); ?></h2>
-			<?php include VSC_BACKUP_TEMPLATES_PATH . '/common/leave-feedback.php'; ?>
+			<?php /* Feedback form removed - internal tool only */ ?>
 
 			<?php do_action( 'vsc_backup_sidebar_right_end' ); ?>
 
