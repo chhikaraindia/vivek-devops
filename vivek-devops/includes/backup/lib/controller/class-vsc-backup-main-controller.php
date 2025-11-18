@@ -726,7 +726,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_settings',
-			'vsc_backup_locale',
+			'ai1wm_locale',
 			array(
 				'leave_feedback'                      => __( 'Leave plugin developers any feedback here', VSC_BACKUP_PLUGIN_NAME ),
 				'how_may_we_help_you'                 => __( 'How may we help you?', VSC_BACKUP_PLUGIN_NAME ),
@@ -779,7 +779,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_export',
-			'vsc_backup_feedback',
+			'ai1wm_feedback',
 			array(
 				'ajax'       => array(
 					'url' => wp_make_link_relative( admin_url( 'admin-ajax.php?action=vsc_backup_feedback' ) ),
@@ -790,7 +790,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_export',
-			'vsc_backup_export',
+			'ai1wm_export',
 			array(
 				'ajax'       => array(
 					'url' => wp_make_link_relative( add_query_arg( array( 'vsc_backup_import' => 1 ), admin_url( 'admin-ajax.php?action=vsc_backup_export' ) ) ),
@@ -804,7 +804,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_export',
-			'vsc_backup_locale',
+			'ai1wm_locale',
 			array(
 				'stop_exporting_your_website'         => __( 'You are about to stop exporting your website, are you sure?', VSC_BACKUP_PLUGIN_NAME ),
 				'preparing_to_export'                 => __( 'Preparing to export...', VSC_BACKUP_PLUGIN_NAME ),
@@ -868,7 +868,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_import',
-			'vsc_backup_feedback',
+			'ai1wm_feedback',
 			array(
 				'ajax'       => array(
 					'url' => wp_make_link_relative( admin_url( 'admin-ajax.php?action=vsc_backup_feedback' ) ),
@@ -879,7 +879,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_import',
-			'vsc_backup_uploader',
+			'ai1wm_uploader',
 			array(
 				'max_file_size' => wp_max_upload_size(),
 				'url'           => wp_make_link_relative( add_query_arg( array( 'vsc_backup_import' => 1 ), admin_url( 'admin-ajax.php?action=vsc_backup_import' ) ) ),
@@ -892,7 +892,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_import',
-			'vsc_backup_import',
+			'ai1wm_import',
 			array(
 				'ajax'       => array(
 					'url' => wp_make_link_relative( add_query_arg( array( 'vsc_backup_import' => 1 ), admin_url( 'admin-ajax.php?action=vsc_backup_import' ) ) ),
@@ -906,7 +906,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_import',
-			'vsc_backup_compatibility',
+			'ai1wm_compatibility',
 			array(
 				'messages' => VSC_Backup_Compatibility::get( array() ),
 			)
@@ -914,7 +914,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_import',
-			'vsc_backup_disk_space',
+			'ai1wm_disk_space',
 			array(
 				'free'   => vsc_backup_disk_free_space( VSC_BACKUP_STORAGE_PATH ),
 				'factor' => VSC_BACKUP_DISK_SPACE_FACTOR,
@@ -924,7 +924,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_import',
-			'vsc_backup_locale',
+			'ai1wm_locale',
 			array(
 				'stop_importing_your_website'         => __( 'You are about to stop importing your website, are you sure?', VSC_BACKUP_PLUGIN_NAME ),
 				'preparing_to_import'                 => __( 'Preparing to import...', VSC_BACKUP_PLUGIN_NAME ),
@@ -1034,7 +1034,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_backups',
-			'vsc_backup_feedback',
+			'ai1wm_feedback',
 			array(
 				'ajax'       => array(
 					'url' => wp_make_link_relative( admin_url( 'admin-ajax.php?action=vsc_backup_feedback' ) ),
@@ -1045,7 +1045,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_backups',
-			'vsc_backup_import',
+			'ai1wm_import',
 			array(
 				'ajax'       => array(
 					'url' => wp_make_link_relative( add_query_arg( array( 'vsc_backup_import' => 1 ), admin_url( 'admin-ajax.php?action=vsc_backup_import' ) ) ),
@@ -1059,7 +1059,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_backups',
-			'vsc_backup_export',
+			'ai1wm_export',
 			array(
 				'ajax'       => array(
 					'url' => wp_make_link_relative( add_query_arg( array( 'vsc_backup_import' => 1 ), admin_url( 'admin-ajax.php?action=vsc_backup_export' ) ) ),
@@ -1073,7 +1073,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_backups',
-			'vsc_backup_backups',
+			'ai1wm_backups',
 			array(
 				'ajax'       => array(
 					'url' => wp_make_link_relative( admin_url( 'admin-ajax.php?action=vsc_backup_backups' ) ),
@@ -1090,7 +1090,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_backups',
-			'vsc_backup_disk_space',
+			'ai1wm_disk_space',
 			array(
 				'free'   => vsc_backup_disk_free_space( VSC_BACKUP_STORAGE_PATH ),
 				'factor' => VSC_BACKUP_DISK_SPACE_FACTOR,
@@ -1100,7 +1100,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_backups',
-			'vsc_backup_list',
+			'ai1wm_list',
 			array(
 				'ajax'       => array(
 					'url' => wp_make_link_relative( add_query_arg( array( 'vsc_backup_import' => 1 ), admin_url( 'admin-ajax.php?action=vsc_backup_backup_list_content' ) ) ),
@@ -1114,7 +1114,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_backups',
-			'vsc_backup_locale',
+			'ai1wm_locale',
 			array(
 				'stop_exporting_your_website'         => __( 'You are about to stop exporting your website, are you sure?', VSC_BACKUP_PLUGIN_NAME ),
 				'preparing_to_export'                 => __( 'Preparing to export...', VSC_BACKUP_PLUGIN_NAME ),
@@ -1238,7 +1238,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_updater',
-			'vsc_backup_updater',
+			'ai1wm_updater',
 			array(
 				'ajax' => array(
 					'url' => wp_make_link_relative( add_query_arg( array( 'vsc_backup_nonce' => wp_create_nonce( 'vsc_backup_updater' ) ), admin_url( 'admin-ajax.php?action=vsc_backup_updater' ) ) ),
@@ -1248,7 +1248,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_updater',
-			'vsc_backup_locale',
+			'ai1wm_locale',
 			array(
 				'check_for_updates'   => __( 'Check for updates', VSC_BACKUP_PLUGIN_NAME ),
 				'invalid_purchase_id' => __( 'Your purchase ID is invalid, please <a href="mailto:support@vivekchhikara.com">contact us</a>', VSC_BACKUP_PLUGIN_NAME ),
