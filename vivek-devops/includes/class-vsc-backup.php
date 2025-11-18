@@ -94,20 +94,14 @@ class VSC_Backup {
             // Load controllers
             $this->load_controller_files();
 
-            // Initialize main controller only after admin_init
-            add_action('admin_init', array($this, 'init_main_controller'), 5);
+            // Initialize main controller immediately
+            // (Not delayed - it needs to register its hooks before admin_init fires)
+            if (class_exists('VSC_Backup_Main_Controller')) {
+                new VSC_Backup_Main_Controller();
+            }
         } catch (Exception $e) {
             // Log error but don't break the plugin
             error_log('VSC Backup Error: ' . $e->getMessage());
-        }
-    }
-
-    /**
-     * Initialize main controller after WordPress is fully loaded
-     */
-    public function init_main_controller() {
-        if (class_exists('VSC_Backup_Main_Controller')) {
-            new VSC_Backup_Main_Controller();
         }
     }
 
