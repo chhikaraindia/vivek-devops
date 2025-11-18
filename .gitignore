@@ -9,3 +9,8 @@ vivek-devops-current/
 refrence plugins/all-in-one-wp-migration/
 refrence plugins/all-in-one-wp-migration-unlimited-extension/
 refrence plugins/adminify-pro/
+
+# Temporary files
+zip*
+*.tmp
+*.temp
