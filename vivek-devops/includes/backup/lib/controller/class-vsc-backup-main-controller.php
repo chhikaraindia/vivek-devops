@@ -743,7 +743,8 @@ class VSC_Backup_Main_Controller {
 	 * @return void
 	 */
 	public function enqueue_export_scripts_and_styles( $hook ) {
-		if ( stripos( 'toplevel_page_vsc_backup_export', $hook ) === false ) {
+		// Check if we're on the VSC backup page
+		if ( stripos( $hook, 'vsc-backup' ) === false ) {
 			return;
 		}
 
@@ -826,7 +827,8 @@ class VSC_Backup_Main_Controller {
 	 * @return void
 	 */
 	public function enqueue_import_scripts_and_styles( $hook ) {
-		if ( stripos( 'vsc-backup_page_vsc_backup_import', $hook ) === false ) {
+		// Check if we're on the VSC backup page
+		if ( stripos( $hook, 'vsc-backup' ) === false ) {
 			return;
 		}
 
@@ -986,7 +988,8 @@ class VSC_Backup_Main_Controller {
 	 * @return void
 	 */
 	public function enqueue_backups_scripts_and_styles( $hook ) {
-		if ( stripos( 'vsc-backup_page_vsc_backup_backups', $hook ) === false ) {
+		// Check if we're on the VSC backup page
+		if ( stripos( $hook, 'vsc-backup' ) === false ) {
 			return;
 		}
 
@@ -1159,7 +1162,8 @@ class VSC_Backup_Main_Controller {
 	 * @return void
 	 */
 	public function enqueue_schedules_scripts_and_styles( $hook ) {
-		if ( stripos( 'vsc-backup_page_vsc_backup_schedules', $hook ) === false ) {
+		// Check if we're on the VSC backup page
+		if ( stripos( $hook, 'vsc-backup' ) === false ) {
 			return;
 		}
 
