@@ -59,3 +59,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	console.log('VSC Backup: jQuery loaded');
+	console.log('VSC Backup: Looking for export button #ai1wm-export-file');
+	console.log('VSC Backup: Button exists:', $('#ai1wm-export-file').length > 0);
+
+	// Add click handler for debugging
+	$(document).on('click', '#ai1wm-export-file', function(e) {
+		console.log('VSC Backup: Export button clicked!');
+		console.log('VSC Backup: typeof vsc_backup_export:', typeof vsc_backup_export);
+		if (typeof vsc_backup_export !== 'undefined') {
+			console.log('VSC Backup: vsc_backup_export object:', vsc_backup_export);
+		} else {
+			console.error('VSC Backup ERROR: vsc_backup_export object not found! Scripts not loaded properly.');
+			alert('DEBUG: Export scripts not loaded. Check console for details.');
+		}
+	});
+});
+</script>
