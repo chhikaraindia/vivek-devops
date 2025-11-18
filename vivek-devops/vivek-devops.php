@@ -27,7 +27,11 @@ require_once VSC_PATH . 'includes/class-vsc-auth.php';
 require_once VSC_PATH . 'includes/class-vsc-dashboard.php';
 require_once VSC_PATH . 'includes/class-vsc-snippets.php';
 require_once VSC_PATH . 'includes/class-vsc-color-scheme.php';
-require_once VSC_PATH . 'includes/class-vsc-backup.php';
+
+// Load backup module (optional - won't break plugin if it fails)
+if (file_exists(VSC_PATH . 'includes/class-vsc-backup.php')) {
+    require_once VSC_PATH . 'includes/class-vsc-backup.php';
+}
 
 // Initialize
 function vsc_init() {
@@ -37,7 +41,16 @@ function vsc_init() {
     VSC_Dashboard::get_instance();
     VSC_Snippets::get_instance();
     VSC_Color_Scheme::get_instance();
-    VSC_Backup::get_instance();
+
+    // Initialize backup module if available
+    if (class_exists('VSC_Backup')) {
+        try {
+            VSC_Backup::get_instance();
+        } catch (Exception $e) {
+            // Backup module failed - log but continue
+            error_log('VSC Backup initialization failed: ' . $e->getMessage());
+        }
+    }
 
     // Enqueue admin styles
     add_action('admin_enqueue_scripts', 'vsc_enqueue_styles');
