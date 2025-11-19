@@ -30,6 +30,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 class VSC_Backup_Main_Controller {
 
 	/**
+	 * Singleton instance
+	 *
+	 * @var VSC_Backup_Main_Controller
+	 */
+	private static $instance = null;
+
+	/**
+	 * Get singleton instance
+	 *
+	 * @return VSC_Backup_Main_Controller
+	 */
+	public static function get_instance() {
+		if ( self::$instance === null ) {
+			self::$instance = new self();
+		}
+		return self::$instance;
+	}
+
+	/**
 	 * Main Application Controller
 	 *
 	 * @return VSC_Backup_Main_Controller
