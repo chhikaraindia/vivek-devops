@@ -35,28 +35,39 @@ class VSC_Backup_Export_Controller {
 
 	public static function export( $params = array() ) {
 		global $vsc_backup_params;
+
+		// Enhanced error logging
+		error_log("VSC EXPORT: Export started");
+		error_log("VSC EXPORT: Params received: " . print_r($params, true));
+
 		vsc_backup_setup_environment();
+		error_log("VSC EXPORT: Environment setup complete");
 
 		// Set params
 		if ( empty( $params ) ) {
 			$params = stripslashes_deep( array_merge( $_GET, $_POST ) );
+			error_log("VSC EXPORT: Using GET/POST params: " . print_r($params, true));
 		}
 
 		// Set priority
 		if ( ! isset( $params['priority'] ) ) {
 			$params['priority'] = 5;
 		}
+		error_log("VSC EXPORT: Priority set to: " . $params['priority']);
 
 		// Set secret key
 		$secret_key = null;
 		if ( isset( $params['secret_key'] ) ) {
 			$secret_key = trim( $params['secret_key'] );
 		}
+		error_log("VSC EXPORT: Secret key present: " . (empty($secret_key) ? 'NO' : 'YES'));
 
 		try {
 			// Ensure that unauthorized people cannot access export action
 			vsc_backup_verify_secret_key( $secret_key );
+			error_log("VSC EXPORT: Secret key verified");
 		} catch ( VSC_Backup_Not_Valid_Secret_Key_Exception $e ) {
+			error_log("VSC EXPORT ERROR: Invalid secret key");
 			exit;
 		}
 
@@ -68,11 +79,17 @@ class VSC_Backup_Export_Controller {
 				if ( intval( $params['priority'] ) === key( $filters ) ) {
 					foreach ( $hooks as $hook ) {
 						try {
+							error_log("VSC EXPORT: Executing hook: " . print_r($hook['function'], true));
 
 							// Run function hook
 							$params = call_user_func_array( $hook['function'], array( $params ) );
 
+							error_log("VSC EXPORT: Hook completed successfully");
+
 						} catch ( VSC_Backup_Database_Exception $e ) {
+							error_log("VSC EXPORT ERROR: Database exception - Code: " . $e->getCode() . ", Message: " . $e->getMessage());
+							error_log("VSC EXPORT ERROR: Stack trace: " . $e->getTraceAsString());
+
 							if ( defined( 'WP_CLI' ) ) {
 								WP_CLI::error( sprintf( __( 'Unable to export. Error code: %s. %s', VSC_BACKUP_PLUGIN_NAME ), $e->getCode(), $e->getMessage() ) );
 							} else {
@@ -88,6 +105,10 @@ class VSC_Backup_Export_Controller {
 							}
 							exit;
 						} catch ( Exception $e ) {
+							error_log("VSC EXPORT ERROR: General exception - Message: " . $e->getMessage());
+							error_log("VSC EXPORT ERROR: Exception class: " . get_class($e));
+							error_log("VSC EXPORT ERROR: Stack trace: " . $e->getTraceAsString());
+
 							if ( defined( 'WP_CLI' ) ) {
 								WP_CLI::error( sprintf( __( 'Unable to export: %s', VSC_BACKUP_PLUGIN_NAME ), $e->getMessage() ) );
 							} else {
