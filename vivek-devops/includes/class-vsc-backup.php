@@ -280,8 +280,9 @@ class VSC_Backup {
         // Add backup menu to VSC Dashboard
         add_action('admin_menu', array($this, 'add_menu'), 20);
 
-        // Enqueue assets
-        add_action('admin_enqueue_scripts', array($this, 'enqueue_assets'));
+        // Initialize Main Controller (registers AJAX handlers + enqueues scripts)
+        // This is critical - without it, AJAX handlers don't exist and export/import fail!
+        VSC_Backup_Main_Controller::get_instance();
     }
 
     /**
@@ -414,32 +415,8 @@ class VSC_Backup {
         }
     }
 
-    /**
-     * Enqueue backup assets
-     */
-    public function enqueue_assets($hook) {
-        $log_file = VSC_PATH . 'backup-runtime.txt';
-        @file_put_contents($log_file, date('Y-m-d H:i:s') . " - enqueue_assets() called (hook: $hook)\n", FILE_APPEND);
-
-        try {
-            if ($hook !== 'vivek-devops_page_vsc-backup') {
-                return;
-            }
-
-            // Enqueue WordPress media library
-            wp_enqueue_media();
-
-            // Will add CSS/JS here later
-            @file_put_contents($log_file, date('Y-m-d H:i:s') . " - enqueue_assets() completed successfully\n", FILE_APPEND);
-        } catch (Throwable $e) {
-            $error_msg = date('Y-m-d H:i:s') . " - enqueue_assets() ERROR\n";
-            $error_msg .= "Message: " . $e->getMessage() . "\n";
-            $error_msg .= "File: " . $e->getFile() . "\n";
-            $error_msg .= "Line: " . $e->getLine() . "\n";
-            $error_msg .= "Trace: " . $e->getTraceAsString() . "\n\n";
-            @file_put_contents($log_file, $error_msg, FILE_APPEND);
-        }
-    }
+    // Note: Asset enqueuing is now handled by VSC_Backup_Main_Controller
+    // which is initialized in init_hooks() above
 }
 
 // Backup module will be initialized by main plugin file

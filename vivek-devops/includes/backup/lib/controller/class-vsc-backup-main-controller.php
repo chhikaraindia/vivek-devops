@@ -228,6 +228,9 @@ class VSC_Backup_Main_Controller {
 	 * @return void
 	 */
 	public function vsc_backup_loaded() {
+		// NOTE: Menu creation disabled - VSC_Backup class creates submenu under VSC Dashboard
+		// Uncommenting the code below would create a duplicate top-level menu
+		/*
 		if ( ! defined( 'AI1WMME_PLUGIN_NAME' ) ) {
 			if ( is_multisite() ) {
 				add_action( 'network_admin_notices', array( $this, 'multisite_notice' ) );
@@ -241,6 +244,7 @@ class VSC_Backup_Main_Controller {
 				add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 			}
 		}
+		*/
 
 		// Add in plugin update message
 		foreach ( VSC_Backup_Extensions::get() as $slug => $extension ) {
@@ -743,8 +747,8 @@ class VSC_Backup_Main_Controller {
 	 * @return void
 	 */
 	public function enqueue_export_scripts_and_styles( $hook ) {
-		// Check if we're on the VSC backup page
-		if ( stripos( $hook, 'vsc-backup' ) === false ) {
+		// Check if we're on the VSC backup page (submenu under VSC Dashboard)
+		if ( $hook !== 'vivek-devops_page_vsc-backup' ) {
 			return;
 		}
 
@@ -832,8 +836,8 @@ class VSC_Backup_Main_Controller {
 	 * @return void
 	 */
 	public function enqueue_import_scripts_and_styles( $hook ) {
-		// Check if we're on the VSC backup page
-		if ( stripos( $hook, 'vsc-backup' ) === false ) {
+		// Check if we're on the VSC backup page (submenu under VSC Dashboard)
+		if ( $hook !== 'vivek-devops_page_vsc-backup' ) {
 			return;
 		}
 
@@ -998,8 +1002,8 @@ class VSC_Backup_Main_Controller {
 	 * @return void
 	 */
 	public function enqueue_backups_scripts_and_styles( $hook ) {
-		// Check if we're on the VSC backup page
-		if ( stripos( $hook, 'vsc-backup' ) === false ) {
+		// Check if we're on the VSC backup page (submenu under VSC Dashboard)
+		if ( $hook !== 'vivek-devops_page_vsc-backup' ) {
 			return;
 		}
 
@@ -1177,8 +1181,8 @@ class VSC_Backup_Main_Controller {
 	 * @return void
 	 */
 	public function enqueue_schedules_scripts_and_styles( $hook ) {
-		// Check if we're on the VSC backup page
-		if ( stripos( $hook, 'vsc-backup' ) === false ) {
+		// Check if we're on the VSC backup page (submenu under VSC Dashboard)
+		if ( $hook !== 'vivek-devops_page_vsc-backup' ) {
 			return;
 		}
 
