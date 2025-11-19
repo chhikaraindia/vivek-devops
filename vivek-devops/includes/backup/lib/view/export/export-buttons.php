@@ -63,19 +63,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 <script type="text/javascript">
 jQuery(document).ready(function($) {
 	console.log('VSC Backup: jQuery loaded');
-	console.log('VSC Backup: Looking for export button #ai1wm-export-file');
-	console.log('VSC Backup: Button exists:', $('#ai1wm-export-file').length > 0);
+	console.log('VSC Backup: Dropdown toggle script initialized');
 
-	// Add click handler for debugging
-	$(document).on('click', '#ai1wm-export-file', function(e) {
-		console.log('VSC Backup: Export button clicked!');
-		console.log('VSC Backup: typeof vsc_backup_export:', typeof vsc_backup_export);
-		if (typeof vsc_backup_export !== 'undefined') {
-			console.log('VSC Backup: vsc_backup_export object:', vsc_backup_export);
-		} else {
-			console.error('VSC Backup ERROR: vsc_backup_export object not found! Scripts not loaded properly.');
-			alert('DEBUG: Export scripts not loaded. Check console for details.');
-		}
+	// Toggle dropdown when clicking "Export To" button
+	$('.ai1wm-button-main').on('click', function(e) {
+		e.preventDefault();
+		console.log('VSC Backup: Export To button clicked');
+		var $parent = $(this).closest('.ai1wm-button-group');
+		console.log('VSC Backup: Parent has ai1wm-open:', $parent.hasClass('ai1wm-open'));
+		$parent.toggleClass('ai1wm-open');
+		console.log('VSC Backup: After toggle, has ai1wm-open:', $parent.hasClass('ai1wm-open'));
 	});
+
+	// Check if export file button exists in dropdown
+	console.log('VSC Backup: Export file button exists:', $('#ai1wm-export-file').length > 0);
+	console.log('VSC Backup: Checking JavaScript objects...');
+	console.log('VSC Backup: typeof ai1wm_export:', typeof ai1wm_export);
+	console.log('VSC Backup: typeof ai1wm_locale:', typeof ai1wm_locale);
+
+	if (typeof ai1wm_export !== 'undefined') {
+		console.log('VSC Backup: ai1wm_export object:', ai1wm_export);
+	} else {
+		console.error('VSC Backup ERROR: ai1wm_export object not found!');
+	}
+
+	if (typeof ai1wm_locale !== 'undefined') {
+		console.log('VSC Backup: ai1wm_locale object:', ai1wm_locale);
+	} else {
+		console.error('VSC Backup ERROR: ai1wm_locale object not found!');
+	}
 });
 </script>

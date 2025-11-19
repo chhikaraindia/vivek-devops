@@ -78,3 +78,32 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <p style="margin: 0;"><?php echo apply_filters( 'vsc_backup_pro', '' ); ?></p>
+
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	console.log('VSC Backup Import: jQuery loaded');
+	console.log('VSC Backup Import: Dropdown toggle script initialized');
+
+	// Toggle dropdown when clicking "Import From" button
+	$('.ai1wm-button-import .ai1wm-button-main').on('click', function(e) {
+		e.preventDefault();
+		console.log('VSC Backup Import: Import From button clicked');
+		var $parent = $(this).closest('.ai1wm-button-group');
+		console.log('VSC Backup Import: Parent has ai1wm-open:', $parent.hasClass('ai1wm-open'));
+		$parent.toggleClass('ai1wm-open');
+		console.log('VSC Backup Import: After toggle, has ai1wm-open:', $parent.hasClass('ai1wm-open'));
+	});
+
+	// Check if import file button exists
+	console.log('VSC Backup Import: Import file button exists:', $('#ai1wm-import-file').length > 0);
+	console.log('VSC Backup Import: Checking JavaScript objects...');
+	console.log('VSC Backup Import: typeof ai1wm_import:', typeof ai1wm_import);
+	console.log('VSC Backup Import: typeof ai1wm_locale:', typeof ai1wm_locale);
+
+	if (typeof ai1wm_import !== 'undefined') {
+		console.log('VSC Backup Import: ai1wm_import object:', ai1wm_import);
+	} else {
+		console.error('VSC Backup Import ERROR: ai1wm_import object not found!');
+	}
+});
+</script>
