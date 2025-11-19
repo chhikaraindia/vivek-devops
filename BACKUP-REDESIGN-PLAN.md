@@ -121,10 +121,122 @@ private function init_hooks() {
 
 ## Result
 
-After fix:
+After V-30.17 fix:
 1. ✅ VSC_Backup creates submenu under VSC Dashboard
 2. ✅ Main Controller initializes and registers AJAX handlers
 3. ✅ Main Controller enqueues scripts on backup pages
 4. ✅ Export/Import work because AJAX handlers exist
 5. ✅ No duplicate menus
 6. ✅ Clean architecture with clear responsibilities
+
+---
+
+## V-30.19-20 Additional Fixes
+
+### V-30.19: Added Singleton Pattern
+**Problem:** VSC_Backup called `VSC_Backup_Main_Controller::get_instance()` but method didn't exist.
+
+**Fix:** Added singleton pattern to Main Controller:
+- Added `private static $instance` property
+- Added `public static get_instance()` method
+- Ensures single instance of controller
+
+### V-30.20: Fixed plugins_loaded Timing Issue (CRITICAL)
+**Problem:** Export buttons and commands weren't being registered!
+
+**Root Cause:**
+```
+plugins_loaded (priority 10) fires
+  └─ vsc_init() runs
+     └─ VSC_Backup::get_instance()
+        └─ Main Controller::get_instance()
+           └─ Main Controller::__construct()
+              └─ activate_actions()
+                 └─ add_action('plugins_loaded', ..., 10) ❌ TOO LATE!
+```
+
+We were trying to register `plugins_loaded` hooks WHILE ALREADY INSIDE `plugins_loaded` at the same priority!
+
+**Result:**
+- ❌ `vsc_backup_buttons()` never ran → Export buttons filter not registered
+- ❌ `vsc_backup_commands()` never ran → Export/import pipeline not registered
+- ❌ `vsc_backup_loaded()` never ran → HTTP headers not registered
+- ❌ Export/import completely broken
+
+**Fix (V-30.20):**
+Call these methods directly in constructor instead of waiting for hook:
+```php
+// In Main Controller constructor (lines 73-85)
+$this->vsc_backup_loaded();
+$this->vsc_backup_commands();  // Registers export/import filter pipeline
+$this->vsc_backup_buttons();   // Registers export/import buttons filter
+```
+
+Commented out duplicate `plugins_loaded` hooks in `activate_actions()` with explanation.
+
+**Why This Works:**
+- Methods are called immediately during initialization
+- Filters are registered before pages render
+- Export buttons appear in dropdown
+- Export/import AJAX works end-to-end
+
+## Complete Architecture (V-30.20)
+
+```
+WordPress Initialization
+├─ plugins_loaded (priority 10)
+│  └─ vsc_init()
+│     ├─ VSC_Core::get_instance()
+│     ├─ VSC_Backup::get_instance()
+│     │  └─ VSC_Backup::__construct()
+│     │     └─ init_hooks()
+│     │        ├─ add_action('admin_init', setup_storage)
+│     │        ├─ add_action('admin_menu', add_menu, 20)
+│     │        └─ VSC_Backup_Main_Controller::get_instance() ✅
+│     │           └─ Main Controller::__construct()
+│     │              ├─ activate_actions() → registers admin_init/enqueue hooks
+│     │              ├─ activate_filters() → registers plugin_row_meta
+│     │              ├─ vsc_backup_loaded() ✅ → registers HTTP headers
+│     │              ├─ vsc_backup_commands() ✅ → registers export/import pipeline
+│     │              └─ vsc_backup_buttons() ✅ → registers button filters
+│     └─ Other VSC modules...
+│
+├─ admin_init
+│  ├─ Main Controller::init()
+│  ├─ Main Controller::router() ✅ → registers ALL AJAX handlers
+│  │  ├─ wp_ajax_vsc_backup_export
+│  │  ├─ wp_ajax_vsc_backup_import
+│  │  ├─ wp_ajax_vsc_backup_status
+│  │  └─ etc.
+│  ├─ Main Controller::wp_importing()
+│  ├─ Main Controller::setup_backups_folder()
+│  ├─ Main Controller::setup_storage_folder()
+│  ├─ Main Controller::setup_secret_key() ✅
+│  └─ Main Controller::check_user_role_capability()
+│
+├─ admin_menu (priority 20)
+│  └─ VSC_Backup::add_menu() → creates "Backup and Restore" submenu
+│
+└─ admin_enqueue_scripts (priority 5)
+   ├─ Main Controller::register_scripts_and_styles()
+   ├─ Main Controller::enqueue_export_scripts_and_styles()
+   │  ├─ Checks: $hook === 'vivek-devops_page_vsc-backup' ✅
+   │  ├─ Enqueues: vsc_backup_export.js
+   │  ├─ Localizes: ai1wm_export ✅
+   │  ├─ Localizes: ai1wm_locale ✅
+   │  └─ Localizes: ai1wm_feedback ✅
+   └─ Main Controller::enqueue_import_scripts_and_styles()
+```
+
+## Final Verification Checklist
+
+1. ✅ **Singleton Pattern** - Main Controller has get_instance() method (V-30.19)
+2. ✅ **Initialization** - Main Controller initialized in VSC_Backup::init_hooks() (V-30.17)
+3. ✅ **Buttons Registered** - vsc_backup_buttons() called in constructor (V-30.20)
+4. ✅ **Commands Registered** - vsc_backup_commands() called in constructor (V-30.20)
+5. ✅ **AJAX Handlers** - router() registered on admin_init (V-30.17)
+6. ✅ **Scripts Enqueued** - Correct hook check 'vivek-devops_page_vsc-backup' (V-30.17)
+7. ✅ **JS Objects** - Localized as ai1wm_export, ai1wm_locale (V-30.15)
+8. ✅ **Dropdown Toggle** - JavaScript toggles .ai1wm-open class (V-30.16)
+9. ✅ **No Duplicate Menus** - Main Controller menu disabled (V-30.17)
+10. ✅ **Storage Setup** - Folders and secret key created on admin_init (V-30.17)
