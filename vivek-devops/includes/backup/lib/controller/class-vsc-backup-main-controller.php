@@ -70,20 +70,6 @@ class VSC_Backup_Main_Controller {
 			$this->activate_filters();
 			@file_put_contents($log_file, date('Y-m-d H:i:s') . " - Filters activated\n", FILE_APPEND);
 
-			// CRITICAL FIX: Call plugins_loaded hooks immediately since we're already in plugins_loaded
-			// If we wait for the hook to fire, it won't run because we're registering during the same hook
-			@file_put_contents($log_file, date('Y-m-d H:i:s') . " - Calling vsc_backup_loaded()...\n", FILE_APPEND);
-			$this->vsc_backup_loaded();
-			@file_put_contents($log_file, date('Y-m-d H:i:s') . " - vsc_backup_loaded() completed\n", FILE_APPEND);
-
-			@file_put_contents($log_file, date('Y-m-d H:i:s') . " - Calling vsc_backup_commands()...\n", FILE_APPEND);
-			$this->vsc_backup_commands();
-			@file_put_contents($log_file, date('Y-m-d H:i:s') . " - vsc_backup_commands() completed\n", FILE_APPEND);
-
-			@file_put_contents($log_file, date('Y-m-d H:i:s') . " - Calling vsc_backup_buttons()...\n", FILE_APPEND);
-			$this->vsc_backup_buttons();
-			@file_put_contents($log_file, date('Y-m-d H:i:s') . " - vsc_backup_buttons() completed\n", FILE_APPEND);
-
 			@file_put_contents($log_file, date('Y-m-d H:i:s') . " - Main controller constructed successfully\n", FILE_APPEND);
 		} catch (Throwable $e) {
 			$error_msg = date('Y-m-d H:i:s') . " - Main Controller Constructor ERROR\n";
@@ -155,13 +141,13 @@ class VSC_Backup_Main_Controller {
 		// Admin header
 		add_action( 'admin_head', array( $this, 'admin_head' ) );
 
-		// NOTE: These plugins_loaded hooks are now called directly in constructor
-		// because Main Controller is initialized DURING plugins_loaded hook.
-		// Registering them here would mean they never run (hook already fired).
-		// See constructor lines 73-85 where these are called directly.
-		// add_action( 'plugins_loaded', array( $this, 'vsc_backup_loaded' ), 10 );
-		// add_action( 'plugins_loaded', array( $this, 'vsc_backup_commands' ), 10 );
-		// add_action( 'plugins_loaded', array( $this, 'vsc_backup_buttons' ), 10 );
+		// CRITICAL FIX V-30.21: Use 'init' hook instead of 'plugins_loaded'
+		// Main Controller is initialized DURING 'plugins_loaded', so calling these methods
+		// directly in the constructor (V-30.20) was TOO EARLY and broke WordPress.
+		// The 'init' hook fires AFTER WordPress is fully loaded, which is the right timing.
+		add_action( 'init', array( $this, 'vsc_backup_loaded' ), 10 );
+		add_action( 'init', array( $this, 'vsc_backup_commands' ), 10 );
+		add_action( 'init', array( $this, 'vsc_backup_buttons' ), 10 );
 
 		// WP CLI commands
 		add_action( 'plugins_loaded', array( $this, 'wp_cli' ), 10 );
