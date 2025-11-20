@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Vivek DevOps
  * Description: Vivek DevOps is a comprehensive DevSecOps suite for developers, crafted to transform backend management into a streamlined, secure, and developer-centric experience. It integrates security enforcement, custom branding, UI customization, user access policies, and critical infrastructure tooling into a single lightweight framework.
- * Version: 31.0
+ * Version: 32.0
  * Author: Vivek Chhikara
  * Author URI: https://vivekchhikara.com
  */
@@ -10,7 +10,7 @@
 if (!defined('ABSPATH')) exit;
 
 // Plugin version
-define('VSC_VERSION', '31.0');
+define('VSC_VERSION', '32.0');
 define('VSC_NAME', 'Vivek DevOps');
 define('VSC_PATH', plugin_dir_path(__FILE__));
 define('VSC_URL', plugin_dir_url(__FILE__));
@@ -26,18 +26,12 @@ require_once VSC_PATH . 'includes/class-vsc-dashboard.php';
 require_once VSC_PATH . 'includes/class-vsc-snippets.php';
 require_once VSC_PATH . 'includes/class-vsc-color-scheme.php';
 
-// Load backup module (optional - won't break plugin if it fails)
-// Wrap in try-catch to prevent any fatal errors
-try {
-    if (file_exists(VSC_PATH . 'includes/class-vsc-backup.php')) {
-        require_once VSC_PATH . 'includes/class-vsc-backup.php';
-    }
-} catch (Throwable $e) {
-    if (WP_DEBUG_LOG) {
-        error_log('VSC Backup Module Load Error: ' . $e->getMessage());
-        error_log('File: ' . $e->getFile() . ' Line: ' . $e->getLine());
-    }
-}
+// Load backup module (clean, simple backup system)
+require_once VSC_PATH . 'includes/backup/class-vsc-backup-engine.php';
+require_once VSC_PATH . 'includes/backup/class-vsc-backup-ajax.php';
+require_once VSC_PATH . 'includes/backup/class-vsc-backup-google-drive.php';
+require_once VSC_PATH . 'includes/backup/class-vsc-backup-scheduler.php';
+require_once VSC_PATH . 'includes/backup/class-vsc-backup-page.php';
 
 // Initialize
 function vsc_init() {
@@ -49,27 +43,10 @@ function vsc_init() {
     VSC_Snippets::get_instance();
     VSC_Color_Scheme::get_instance();
 
-    // Initialize backup module if available
-    if (class_exists('VSC_Backup')) {
-        if (WP_DEBUG_LOG) {
-            error_log('VSC Backup: Initializing backup module');
-        }
-
-        try {
-            VSC_Backup::get_instance();
-            if (WP_DEBUG_LOG) {
-                error_log('VSC Backup: Initialized successfully');
-            }
-        } catch (Throwable $e) {
-            if (WP_DEBUG_LOG) {
-                error_log('VSC Backup Initialization Error: ' . $e->getMessage());
-            }
-        }
-    } else {
-        if (WP_DEBUG_LOG) {
-            error_log('VSC Backup: Class not found');
-        }
-    }
+    // Initialize backup modules
+    VSC_Backup_AJAX::get_instance();
+    VSC_Backup_Scheduler::get_instance();
+    VSC_Backup_Page::get_instance();
 
     // Enqueue admin styles
     add_action('admin_enqueue_scripts', 'vsc_enqueue_styles');

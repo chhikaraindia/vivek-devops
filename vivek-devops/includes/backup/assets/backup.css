@@ -1,0 +1,72 @@
+.vsc-backup-page {
+    max-width: 1400px;
+}
+
+.vsc-backup-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.vsc-backup-card {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+    padding: 20px;
+    border-radius: 4px;
+}
+
+.vsc-backup-card h2 {
+    margin-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.vsc-backup-card p {
+    margin: 15px 0;
+}
+
+.vsc-backup-card label {
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+.vsc-backup-card select,
+.vsc-backup-card input[type="text"],
+.vsc-backup-card input[type="number"] {
+    width: 100%;
+    max-width: 400px;
+}
+
+#vsc-backup-progress {
+    text-align: center;
+    padding: 20px;
+    background: #f0f0f1;
+    border-radius: 4px;
+}
+
+.vsc-spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #2271b1;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.vsc-success {
+    color: #00a32a;
+    font-weight: 600;
+}
+
+#vsc-backups-list button {
+    margin-right: 5px;
+}
