@@ -748,7 +748,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_settings',
-			'ai1wm_locale',
+			'vsc_backup_locale',
 			array(
 				'leave_feedback'                      => __( 'Leave plugin developers any feedback here', VSC_BACKUP_PLUGIN_NAME ),
 				'how_may_we_help_you'                 => __( 'How may we help you?', VSC_BACKUP_PLUGIN_NAME ),
@@ -801,7 +801,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_export',
-			'ai1wm_feedback',
+			'vsc_backup_feedback',
 			array(
 				'ajax'       => array(
 					'url' => wp_make_link_relative( admin_url( 'admin-ajax.php?action=vsc_backup_feedback' ) ),
@@ -812,7 +812,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_export',
-			'ai1wm_export',
+			'vsc_backup_export',
 			array(
 				'ajax'       => array(
 					'url' => wp_make_link_relative( add_query_arg( array( 'vsc_backup_import' => 1 ), admin_url( 'admin-ajax.php?action=vsc_backup_export' ) ) ),
@@ -826,7 +826,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_export',
-			'ai1wm_locale',
+			'vsc_backup_locale',
 			array(
 				'stop_exporting_your_website'         => __( 'You are about to stop exporting your website, are you sure?', VSC_BACKUP_PLUGIN_NAME ),
 				'preparing_to_export'                 => __( 'Preparing to export...', VSC_BACKUP_PLUGIN_NAME ),
@@ -846,22 +846,6 @@ class VSC_Backup_Main_Controller {
 			)
 		);
 
-		// JavaScript variable shims for backward compatibility
-		// Map old ai1wm variable names to work with renamed code
-		wp_add_inline_script(
-			'vsc_backup_export',
-			'// Backward compatibility shims - map old variable names
-			if (typeof ai1wm_feedback === "undefined" && typeof vsc_backup_feedback !== "undefined") {
-				window.ai1wm_feedback = window.vsc_backup_feedback;
-			}
-			if (typeof ai1wm_export === "undefined" && typeof vsc_backup_export !== "undefined") {
-				window.ai1wm_export = window.vsc_backup_export;
-			}
-			if (typeof ai1wm_locale === "undefined" && typeof vsc_backup_locale !== "undefined") {
-				window.ai1wm_locale = window.vsc_backup_locale;
-			}',
-			'after'
-		);
 	}
 
 	/**
@@ -907,7 +891,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_import',
-			'ai1wm_feedback',
+			'vsc_backup_feedback',
 			array(
 				'ajax'       => array(
 					'url' => wp_make_link_relative( admin_url( 'admin-ajax.php?action=vsc_backup_feedback' ) ),
@@ -918,7 +902,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_import',
-			'ai1wm_uploader',
+			'vsc_backup_uploader',
 			array(
 				'max_file_size' => wp_max_upload_size(),
 				'url'           => wp_make_link_relative( add_query_arg( array( 'vsc_backup_import' => 1 ), admin_url( 'admin-ajax.php?action=vsc_backup_import' ) ) ),
@@ -931,7 +915,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_import',
-			'ai1wm_import',
+			'vsc_backup_import',
 			array(
 				'ajax'       => array(
 					'url' => wp_make_link_relative( add_query_arg( array( 'vsc_backup_import' => 1 ), admin_url( 'admin-ajax.php?action=vsc_backup_import' ) ) ),
@@ -945,7 +929,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_import',
-			'ai1wm_compatibility',
+			'vsc_backup_compatibility',
 			array(
 				'messages' => VSC_Backup_Compatibility::get( array() ),
 			)
@@ -953,7 +937,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_import',
-			'ai1wm_disk_space',
+			'vsc_backup_disk_space',
 			array(
 				'free'   => vsc_backup_disk_free_space( VSC_BACKUP_STORAGE_PATH ),
 				'factor' => VSC_BACKUP_DISK_SPACE_FACTOR,
@@ -963,7 +947,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_import',
-			'ai1wm_locale',
+			'vsc_backup_locale',
 			array(
 				'stop_importing_your_website'         => __( 'You are about to stop importing your website, are you sure?', VSC_BACKUP_PLUGIN_NAME ),
 				'preparing_to_import'                 => __( 'Preparing to import...', VSC_BACKUP_PLUGIN_NAME ),
@@ -1029,31 +1013,6 @@ class VSC_Backup_Main_Controller {
 			)
 		);
 
-		// JavaScript variable shims for backward compatibility
-		// Map old ai1wm variable names to work with renamed code
-		wp_add_inline_script(
-			'vsc_backup_import',
-			'// Backward compatibility shims - map old variable names
-			if (typeof ai1wm_feedback === "undefined" && typeof vsc_backup_feedback !== "undefined") {
-				window.ai1wm_feedback = window.vsc_backup_feedback;
-			}
-			if (typeof ai1wm_uploader === "undefined" && typeof vsc_backup_uploader !== "undefined") {
-				window.ai1wm_uploader = window.vsc_backup_uploader;
-			}
-			if (typeof ai1wm_import === "undefined" && typeof vsc_backup_import !== "undefined") {
-				window.ai1wm_import = window.vsc_backup_import;
-			}
-			if (typeof ai1wm_compatibility === "undefined" && typeof vsc_backup_compatibility !== "undefined") {
-				window.ai1wm_compatibility = window.vsc_backup_compatibility;
-			}
-			if (typeof ai1wm_disk_space === "undefined" && typeof vsc_backup_disk_space !== "undefined") {
-				window.ai1wm_disk_space = window.vsc_backup_disk_space;
-			}
-			if (typeof ai1wm_locale === "undefined" && typeof vsc_backup_locale !== "undefined") {
-				window.ai1wm_locale = window.vsc_backup_locale;
-			}',
-			'after'
-		);
 	}
 
 	/**
@@ -1099,7 +1058,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_backups',
-			'ai1wm_feedback',
+			'vsc_backup_feedback',
 			array(
 				'ajax'       => array(
 					'url' => wp_make_link_relative( admin_url( 'admin-ajax.php?action=vsc_backup_feedback' ) ),
@@ -1110,7 +1069,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_backups',
-			'ai1wm_import',
+			'vsc_backup_import',
 			array(
 				'ajax'       => array(
 					'url' => wp_make_link_relative( add_query_arg( array( 'vsc_backup_import' => 1 ), admin_url( 'admin-ajax.php?action=vsc_backup_import' ) ) ),
@@ -1124,7 +1083,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_backups',
-			'ai1wm_export',
+			'vsc_backup_export',
 			array(
 				'ajax'       => array(
 					'url' => wp_make_link_relative( add_query_arg( array( 'vsc_backup_import' => 1 ), admin_url( 'admin-ajax.php?action=vsc_backup_export' ) ) ),
@@ -1138,7 +1097,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_backups',
-			'ai1wm_backups',
+			'vsc_backup_backups',
 			array(
 				'ajax'       => array(
 					'url' => wp_make_link_relative( admin_url( 'admin-ajax.php?action=vsc_backup_backups' ) ),
@@ -1155,7 +1114,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_backups',
-			'ai1wm_disk_space',
+			'vsc_backup_disk_space',
 			array(
 				'free'   => vsc_backup_disk_free_space( VSC_BACKUP_STORAGE_PATH ),
 				'factor' => VSC_BACKUP_DISK_SPACE_FACTOR,
@@ -1165,7 +1124,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_backups',
-			'ai1wm_list',
+			'vsc_backup_list',
 			array(
 				'ajax'       => array(
 					'url' => wp_make_link_relative( add_query_arg( array( 'vsc_backup_import' => 1 ), admin_url( 'admin-ajax.php?action=vsc_backup_backup_list_content' ) ) ),
@@ -1179,7 +1138,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_backups',
-			'ai1wm_locale',
+			'vsc_backup_locale',
 			array(
 				'stop_exporting_your_website'         => __( 'You are about to stop exporting your website, are you sure?', VSC_BACKUP_PLUGIN_NAME ),
 				'preparing_to_export'                 => __( 'Preparing to export...', VSC_BACKUP_PLUGIN_NAME ),
@@ -1234,34 +1193,6 @@ class VSC_Backup_Main_Controller {
 			)
 		);
 
-		// JavaScript variable shims for backward compatibility
-		// Map old ai1wm variable names to work with renamed code
-		wp_add_inline_script(
-			'vsc_backup_backups',
-			'// Backward compatibility shims - map old variable names
-			if (typeof ai1wm_feedback === "undefined" && typeof vsc_backup_feedback !== "undefined") {
-				window.ai1wm_feedback = window.vsc_backup_feedback;
-			}
-			if (typeof ai1wm_import === "undefined" && typeof vsc_backup_import !== "undefined") {
-				window.ai1wm_import = window.vsc_backup_import;
-			}
-			if (typeof ai1wm_export === "undefined" && typeof vsc_backup_export !== "undefined") {
-				window.ai1wm_export = window.vsc_backup_export;
-			}
-			if (typeof ai1wm_backups === "undefined" && typeof vsc_backup_backups !== "undefined") {
-				window.ai1wm_backups = window.vsc_backup_backups;
-			}
-			if (typeof ai1wm_disk_space === "undefined" && typeof vsc_backup_disk_space !== "undefined") {
-				window.ai1wm_disk_space = window.vsc_backup_disk_space;
-			}
-			if (typeof ai1wm_list === "undefined" && typeof vsc_backup_list !== "undefined") {
-				window.ai1wm_list = window.vsc_backup_list;
-			}
-			if (typeof ai1wm_locale === "undefined" && typeof vsc_backup_locale !== "undefined") {
-				window.ai1wm_locale = window.vsc_backup_locale;
-			}',
-			'after'
-		);
 	}
 
 	/**
@@ -1332,7 +1263,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_updater',
-			'ai1wm_updater',
+			'vsc_backup_updater',
 			array(
 				'ajax' => array(
 					'url' => wp_make_link_relative( add_query_arg( array( 'vsc_backup_nonce' => wp_create_nonce( 'vsc_backup_updater' ) ), admin_url( 'admin-ajax.php?action=vsc_backup_updater' ) ) ),
@@ -1342,7 +1273,7 @@ class VSC_Backup_Main_Controller {
 
 		wp_localize_script(
 			'vsc_backup_updater',
-			'ai1wm_locale',
+			'vsc_backup_locale',
 			array(
 				'check_for_updates'   => __( 'Check for updates', VSC_BACKUP_PLUGIN_NAME ),
 				'invalid_purchase_id' => __( 'Your purchase ID is invalid, please <a href="mailto:support@vivekchhikara.com">contact us</a>', VSC_BACKUP_PLUGIN_NAME ),
