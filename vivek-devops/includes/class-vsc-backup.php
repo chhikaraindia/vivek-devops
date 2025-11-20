@@ -64,40 +64,68 @@ class VSC_Backup {
         define('VSC_BACKUP_PLUGIN_BASENAME', basename(dirname(VSC_PATH)) . '/vivek-devops.php');
 
         // Backup module paths
-        define('VSC_BACKUP_PATH', VSC_PATH . 'includes/backup');
-        define('VSC_BACKUP_LIB_PATH', VSC_BACKUP_PATH . '/lib');
-        $upload_dir = wp_upload_dir();
-        $backup_base = dirname($upload_dir['basedir']); // wp-content directory
-        define('VSC_BACKUP_STORAGE_PATH', $backup_base . '/vsc-backups');
-        define('VSC_BACKUP_BACKUPS_PATH', VSC_BACKUP_STORAGE_PATH . '/backups');
+        if (!defined('VSC_BACKUP_PATH')) {
+            define('VSC_BACKUP_PATH', VSC_PATH . 'includes/backup');
+        }
+        if (!defined('VSC_BACKUP_LIB_PATH')) {
+            define('VSC_BACKUP_LIB_PATH', VSC_BACKUP_PATH . '/lib');
+        }
+        if (!defined('VSC_BACKUP_STORAGE_PATH')) {
+            $upload_dir = wp_upload_dir();
+            $backup_base = dirname($upload_dir['basedir']); // wp-content directory
+            define('VSC_BACKUP_STORAGE_PATH', $backup_base . '/vsc-backups');
+        }
+        if (!defined('VSC_BACKUP_BACKUPS_PATH')) {
+            define('VSC_BACKUP_BACKUPS_PATH', VSC_BACKUP_STORAGE_PATH . '/backups');
+        }
 
         // URLs
         define('VSC_BACKUP_URL', VSC_URL . 'includes/backup');
         define('VSC_BACKUP_STORAGE_URL', VSC_URL . 'storage');
 
         // Backup file extension
-        define('VSC_BACKUP_EXTENSION', '.vscbackup');
+        if (!defined('VSC_BACKUP_EXTENSION')) {
+            define('VSC_BACKUP_EXTENSION', '.vscbackup');
+        }
 
-        // Archive structure names
-        define('VSC_BACKUP_DATABASE_NAME', 'database.sql');
-        define('VSC_BACKUP_PACKAGE_NAME', 'package.json');
-        define('VSC_BACKUP_SETTINGS_NAME', 'settings.json');
+        // Archive structure names (may also be defined in constants.php)
+        if (!defined('VSC_BACKUP_DATABASE_NAME')) {
+            define('VSC_BACKUP_DATABASE_NAME', 'database.sql');
+        }
+        if (!defined('VSC_BACKUP_PACKAGE_NAME')) {
+            define('VSC_BACKUP_PACKAGE_NAME', 'package.json');
+        }
+        if (!defined('VSC_BACKUP_SETTINGS_NAME')) {
+            define('VSC_BACKUP_SETTINGS_NAME', 'settings.json');
+        }
 
-        // Security
-        define('VSC_BACKUP_SECRET_KEY', 'vsc_backup_secret_key');
+        // Security (may also be defined in constants.php)
+        if (!defined('VSC_BACKUP_SECRET_KEY')) {
+            define('VSC_BACKUP_SECRET_KEY', 'vsc_backup_secret_key');
+        }
 
         // Unlimited size by default (merged from unlimited extension)
-        define('VSC_BACKUP_MAX_FILE_SIZE', PHP_INT_MAX);
-        define('VSC_BACKUP_MAX_CHUNK_SIZE', 5 * 1024 * 1024); // 5MB chunks
+        if (!defined('VSC_BACKUP_MAX_FILE_SIZE')) {
+            define('VSC_BACKUP_MAX_FILE_SIZE', PHP_INT_MAX);
+        }
+        if (!defined('VSC_BACKUP_MAX_CHUNK_SIZE')) {
+            define('VSC_BACKUP_MAX_CHUNK_SIZE', 5 * 1024 * 1024); // 5MB chunks
+        }
 
         // Plugin name for text domain
-        define('VSC_BACKUP_PLUGIN_NAME', 'vsc-backup');
+        if (!defined('VSC_BACKUP_PLUGIN_NAME')) {
+            define('VSC_BACKUP_PLUGIN_NAME', 'vsc-backup');
+        }
 
-        // Table prefix marker
-        define('VSC_BACKUP_TABLE_PREFIX', 'VSC_PREFIX_');
+        // Table prefix marker (may also be defined in constants.php)
+        if (!defined('VSC_BACKUP_TABLE_PREFIX')) {
+            define('VSC_BACKUP_TABLE_PREFIX', 'VSC_PREFIX_');
+        }
 
         // Debug mode (inherits from VSC)
-        define('VSC_BACKUP_DEBUG', defined('WP_DEBUG') && WP_DEBUG);
+        if (!defined('VSC_BACKUP_DEBUG')) {
+            define('VSC_BACKUP_DEBUG', defined('WP_DEBUG') && WP_DEBUG);
+        }
     }
 
     /**
@@ -110,8 +138,8 @@ class VSC_Backup {
                 return;
             }
 
-            // Convert Class_Name to class-name
-            $class_name = strtolower(str_replace('_', '-', $class));
+            // Convert VSC_Backup_Main_Controller to class-vsc-backup-main-controller.php
+            $class_name = 'class-' . strtolower(str_replace('_', '-', $class));
             $file_name = $class_name . '.php';
 
             // Define potential paths
@@ -130,8 +158,9 @@ class VSC_Backup {
             ];
 
             foreach ($paths as $path) {
-                if (file_exists($path . $file_name)) {
-                    require_once $path . $file_name;
+                $full_path = $path . $file_name;
+                if (file_exists($full_path)) {
+                    require_once $full_path;
                     return;
                 }
             }
