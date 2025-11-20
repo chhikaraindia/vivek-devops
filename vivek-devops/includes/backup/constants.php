@@ -112,7 +112,9 @@ define( 'VSC_BACKUP_ARCHIVE_TOOLS_URL', 'https://vivekchhikara.com/archive/tools
 // =========================
 // = ServMask Table Prefix =
 // =========================
-define( 'VSC_BACKUP_TABLE_PREFIX', 'SERVMASK_PREFIX_' );
+if ( ! defined( 'VSC_BACKUP_TABLE_PREFIX' ) ) {
+	define( 'VSC_BACKUP_TABLE_PREFIX', 'SERVMASK_PREFIX_' );
+}
 
 // ========================
 // = Archive Backups Name =
@@ -122,12 +124,16 @@ define( 'VSC_BACKUP_BACKUPS_NAME', 'ai1wm-backups' );
 // =========================
 // = Archive Database Name =
 // =========================
-define( 'VSC_BACKUP_DATABASE_NAME', 'database.sql' );
+if ( ! defined( 'VSC_BACKUP_DATABASE_NAME' ) ) {
+	define( 'VSC_BACKUP_DATABASE_NAME', 'database.sql' );
+}
 
 // ========================
 // = Archive Package Name =
 // ========================
-define( 'VSC_BACKUP_PACKAGE_NAME', 'package.json' );
+if ( ! defined( 'VSC_BACKUP_PACKAGE_NAME' ) ) {
+	define( 'VSC_BACKUP_PACKAGE_NAME', 'package.json' );
+}
 
 // ==========================
 // = Archive Multisite Name =
@@ -142,7 +148,9 @@ define( 'VSC_BACKUP_BLOGS_NAME', 'blogs.json' );
 // =========================
 // = Archive Settings Name =
 // =========================
-define( 'VSC_BACKUP_SETTINGS_NAME', 'settings.json' );
+if ( ! defined( 'VSC_BACKUP_SETTINGS_NAME' ) ) {
+	define( 'VSC_BACKUP_SETTINGS_NAME', 'settings.json' );
+}
 
 // ==========================
 // = Archive Multipart Name =
@@ -287,7 +295,9 @@ define( 'VSC_BACKUP_ERROR_NAME', 'error.log' );
 // ==============
 // = Secret Key =
 // ==============
-define( 'VSC_BACKUP_SECRET_KEY', 'vsc_backup_secret_key' );
+if ( ! defined( 'VSC_BACKUP_SECRET_KEY' ) ) {
+	define( 'VSC_BACKUP_SECRET_KEY', 'vsc_backup_secret_key' );
+}
 
 // =============
 // = Auth User =
@@ -412,7 +422,9 @@ define( 'VSC_BACKUP_SUPPORT_EMAIL', 'support@vivekchhikara.com' );
 // ==================
 // = Max Chunk Size =
 // ==================
-define( 'VSC_BACKUP_MAX_CHUNK_SIZE', 5 * 1024 * 1024 );
+if ( ! defined( 'VSC_BACKUP_MAX_CHUNK_SIZE' ) ) {
+	define( 'VSC_BACKUP_MAX_CHUNK_SIZE', 5 * 1024 * 1024 );
+}
 
 // =====================
 // = Max Chunk Retries =
@@ -475,7 +487,9 @@ if ( ! defined( 'VSC_BACKUP_DEFAULT_BACKUPS_PATH' ) ) {
 // ================
 // = Backups Path =
 // ================
-define( 'VSC_BACKUP_BACKUPS_PATH', get_option( VSC_BACKUP_BACKUPS_PATH_OPTION, VSC_BACKUP_DEFAULT_BACKUPS_PATH ) );
+if ( ! defined( 'VSC_BACKUP_BACKUPS_PATH' ) ) {
+	define( 'VSC_BACKUP_BACKUPS_PATH', get_option( VSC_BACKUP_BACKUPS_PATH_OPTION, VSC_BACKUP_DEFAULT_BACKUPS_PATH ) );
+}
 
 // ==========================
 // = Storage index.php File =
@@ -1367,10 +1381,12 @@ if ( ! defined( 'AI1WMSE_PLUGIN_SHORT' ) ) {
 // ================================
 // = Unlimited Extension Base Dir =
 // ================================
-if ( defined( 'VSC_BACKUP_PLUGIN_BASENAME' ) ) {
-	define( 'VSC_BACKUP_PLUGIN_BASEDIR', dirname( VSC_BACKUP_PLUGIN_BASENAME ) );
-} else {
-	define( 'VSC_BACKUP_PLUGIN_BASEDIR', 'vsc-backup-unlimited-extension' );
+if ( ! defined( 'VSC_BACKUP_PLUGIN_BASEDIR' ) ) {
+	if ( defined( 'VSC_BACKUP_PLUGIN_BASENAME' ) ) {
+		define( 'VSC_BACKUP_PLUGIN_BASEDIR', dirname( VSC_BACKUP_PLUGIN_BASENAME ) );
+	} else {
+		define( 'VSC_BACKUP_PLUGIN_BASEDIR', 'vsc-backup-unlimited-extension' );
+	}
 }
 
 // =============================
