@@ -231,6 +231,7 @@ class VSC_Backup {
         // Core models
         $this->require_if_exists($model_path . '/class-vsc-backup-template.php');
         $this->require_if_exists($model_path . '/class-vsc-backup-extensions.php');
+        $this->require_if_exists($model_path . '/class-vsc-backup-updater.php');
         $this->require_if_exists($model_path . '/class-vsc-backup-log.php');
         $this->require_if_exists($model_path . '/class-vsc-backup-status.php');
         $this->require_if_exists($model_path . '/class-vsc-backup-notification.php');
