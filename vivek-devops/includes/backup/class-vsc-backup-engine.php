@@ -67,6 +67,10 @@ class VSC_Backup_Engine {
             // Add database file
             $zip->addFile($db_file, 'database.sql');
 
+            // Add WordPress core directories
+            $this->add_directory_to_zip($zip, ABSPATH . 'wp-admin', 'wp-admin');
+            $this->add_directory_to_zip($zip, ABSPATH . 'wp-includes', 'wp-includes');
+
             // Add wp-content files (excluding our backups)
             $this->add_directory_to_zip($zip, WP_CONTENT_DIR, 'wp-content', [
                 $this->backup_dir,
@@ -74,9 +78,34 @@ class VSC_Backup_Engine {
                 WP_CONTENT_DIR . '/upgrade'
             ]);
 
-            // Add wp-config.php
-            if (file_exists(ABSPATH . 'wp-config.php')) {
-                $zip->addFile(ABSPATH . 'wp-config.php', 'wp-config.php');
+            // Add root level files
+            $root_files = [
+                'index.php',
+                'wp-activate.php',
+                'wp-blog-header.php',
+                'wp-comments-post.php',
+                'wp-config.php',
+                'wp-config-sample.php',
+                'wp-cron.php',
+                'wp-links-opml.php',
+                'wp-load.php',
+                'wp-login.php',
+                'wp-mail.php',
+                'wp-settings.php',
+                'wp-signup.php',
+                'wp-trackback.php',
+                'xmlrpc.php',
+                '.htaccess',
+                'robots.txt',
+                'readme.html',
+                'license.txt'
+            ];
+
+            foreach ($root_files as $file) {
+                $file_path = ABSPATH . $file;
+                if (file_exists($file_path)) {
+                    $zip->addFile($file_path, $file);
+                }
             }
 
             $zip->close();
@@ -278,16 +307,51 @@ class VSC_Backup_Engine {
      * Restore files from extracted backup
      */
     private function restore_files($extract_dir) {
+        // Restore WordPress core directories
+        $wp_admin_backup = $extract_dir . '/wp-admin';
+        if (is_dir($wp_admin_backup)) {
+            $this->copy_directory($wp_admin_backup, ABSPATH . 'wp-admin');
+        }
+
+        $wp_includes_backup = $extract_dir . '/wp-includes';
+        if (is_dir($wp_includes_backup)) {
+            $this->copy_directory($wp_includes_backup, ABSPATH . 'wp-includes');
+        }
+
         // Restore wp-content
         $wp_content_backup = $extract_dir . '/wp-content';
         if (is_dir($wp_content_backup)) {
             $this->copy_directory($wp_content_backup, WP_CONTENT_DIR);
         }
 
-        // Restore wp-config.php
-        $config_backup = $extract_dir . '/wp-config.php';
-        if (file_exists($config_backup)) {
-            copy($config_backup, ABSPATH . 'wp-config.php');
+        // Restore root level files
+        $root_files = [
+            'index.php',
+            'wp-activate.php',
+            'wp-blog-header.php',
+            'wp-comments-post.php',
+            'wp-config.php',
+            'wp-config-sample.php',
+            'wp-cron.php',
+            'wp-links-opml.php',
+            'wp-load.php',
+            'wp-login.php',
+            'wp-mail.php',
+            'wp-settings.php',
+            'wp-signup.php',
+            'wp-trackback.php',
+            'xmlrpc.php',
+            '.htaccess',
+            'robots.txt',
+            'readme.html',
+            'license.txt'
+        ];
+
+        foreach ($root_files as $file) {
+            $backup_file = $extract_dir . '/' . $file;
+            if (file_exists($backup_file)) {
+                copy($backup_file, ABSPATH . $file);
+            }
         }
     }
 
