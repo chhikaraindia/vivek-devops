@@ -845,6 +845,23 @@ class VSC_Backup_Main_Controller {
 				'backups_count_plural'                => __( 'You have %d backups', VSC_BACKUP_PLUGIN_NAME ),
 			)
 		);
+
+		// JavaScript variable shims for backward compatibility
+		// Map old ai1wm variable names to work with renamed code
+		wp_add_inline_script(
+			'vsc_backup_export',
+			'// Backward compatibility shims - map old variable names
+			if (typeof ai1wm_feedback === "undefined" && typeof vsc_backup_feedback !== "undefined") {
+				window.ai1wm_feedback = window.vsc_backup_feedback;
+			}
+			if (typeof ai1wm_export === "undefined" && typeof vsc_backup_export !== "undefined") {
+				window.ai1wm_export = window.vsc_backup_export;
+			}
+			if (typeof ai1wm_locale === "undefined" && typeof vsc_backup_locale !== "undefined") {
+				window.ai1wm_locale = window.vsc_backup_locale;
+			}',
+			'after'
+		);
 	}
 
 	/**
@@ -1010,6 +1027,32 @@ class VSC_Backup_Main_Controller {
 					VSC_BACKUP_PLUGIN_NAME
 				),
 			)
+		);
+
+		// JavaScript variable shims for backward compatibility
+		// Map old ai1wm variable names to work with renamed code
+		wp_add_inline_script(
+			'vsc_backup_import',
+			'// Backward compatibility shims - map old variable names
+			if (typeof ai1wm_feedback === "undefined" && typeof vsc_backup_feedback !== "undefined") {
+				window.ai1wm_feedback = window.vsc_backup_feedback;
+			}
+			if (typeof ai1wm_uploader === "undefined" && typeof vsc_backup_uploader !== "undefined") {
+				window.ai1wm_uploader = window.vsc_backup_uploader;
+			}
+			if (typeof ai1wm_import === "undefined" && typeof vsc_backup_import !== "undefined") {
+				window.ai1wm_import = window.vsc_backup_import;
+			}
+			if (typeof ai1wm_compatibility === "undefined" && typeof vsc_backup_compatibility !== "undefined") {
+				window.ai1wm_compatibility = window.vsc_backup_compatibility;
+			}
+			if (typeof ai1wm_disk_space === "undefined" && typeof vsc_backup_disk_space !== "undefined") {
+				window.ai1wm_disk_space = window.vsc_backup_disk_space;
+			}
+			if (typeof ai1wm_locale === "undefined" && typeof vsc_backup_locale !== "undefined") {
+				window.ai1wm_locale = window.vsc_backup_locale;
+			}',
+			'after'
 		);
 	}
 
@@ -1189,6 +1232,35 @@ class VSC_Backup_Main_Controller {
 				'passwords_do_not_match'              => __( 'The passwords do not match', VSC_BACKUP_PLUGIN_NAME ),
 
 			)
+		);
+
+		// JavaScript variable shims for backward compatibility
+		// Map old ai1wm variable names to work with renamed code
+		wp_add_inline_script(
+			'vsc_backup_backups',
+			'// Backward compatibility shims - map old variable names
+			if (typeof ai1wm_feedback === "undefined" && typeof vsc_backup_feedback !== "undefined") {
+				window.ai1wm_feedback = window.vsc_backup_feedback;
+			}
+			if (typeof ai1wm_import === "undefined" && typeof vsc_backup_import !== "undefined") {
+				window.ai1wm_import = window.vsc_backup_import;
+			}
+			if (typeof ai1wm_export === "undefined" && typeof vsc_backup_export !== "undefined") {
+				window.ai1wm_export = window.vsc_backup_export;
+			}
+			if (typeof ai1wm_backups === "undefined" && typeof vsc_backup_backups !== "undefined") {
+				window.ai1wm_backups = window.vsc_backup_backups;
+			}
+			if (typeof ai1wm_disk_space === "undefined" && typeof vsc_backup_disk_space !== "undefined") {
+				window.ai1wm_disk_space = window.vsc_backup_disk_space;
+			}
+			if (typeof ai1wm_list === "undefined" && typeof vsc_backup_list !== "undefined") {
+				window.ai1wm_list = window.vsc_backup_list;
+			}
+			if (typeof ai1wm_locale === "undefined" && typeof vsc_backup_locale !== "undefined") {
+				window.ai1wm_locale = window.vsc_backup_locale;
+			}',
+			'after'
 		);
 	}
 

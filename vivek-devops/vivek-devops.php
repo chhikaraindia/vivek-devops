@@ -10,7 +10,7 @@
 if (!defined('ABSPATH')) exit;
 
 // Plugin version
-define('VSC_VERSION', '30.22');
+define('VSC_VERSION', '30.23');
 define('VSC_NAME', 'Vivek DevOps');
 define('VSC_PATH', plugin_dir_path(__FILE__));
 define('VSC_URL', plugin_dir_url(__FILE__));
