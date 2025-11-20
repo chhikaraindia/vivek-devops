@@ -119,6 +119,23 @@ class VSC_Backup_Page {
                     </div>
                 </div>
 
+                <!-- Import Backup Section -->
+                <div class="vsc-backup-card">
+                    <h2>Import Backup</h2>
+                    <p>Upload a backup file from another site to restore it here.</p>
+                    <form id="vsc-upload-form" enctype="multipart/form-data">
+                        <input type="file" id="vsc-backup-file" accept=".zip" style="margin-bottom:10px;">
+                        <br>
+                        <button type="submit" class="button button-primary button-large">
+                            Upload & Import
+                        </button>
+                    </form>
+                    <div id="vsc-upload-progress" style="display:none; margin-top:15px;">
+                        <div class="vsc-spinner"></div>
+                        <p>Uploading backup...</p>
+                    </div>
+                </div>
+
                 <!-- Automated Backups -->
                 <div class="vsc-backup-card">
                     <h2>Automated Backups</h2>

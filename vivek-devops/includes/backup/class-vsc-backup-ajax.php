@@ -25,6 +25,7 @@ class VSC_Backup_AJAX {
         add_action('wp_ajax_vsc_delete_backup', [$this, 'delete_backup']);
         add_action('wp_ajax_vsc_download_backup', [$this, 'download_backup']);
         add_action('wp_ajax_vsc_get_backups', [$this, 'get_backups']);
+        add_action('wp_ajax_vsc_upload_backup', [$this, 'upload_backup']);
     }
 
     public function create_backup() {
@@ -151,5 +152,70 @@ class VSC_Backup_AJAX {
         header('Content-Length: ' . filesize($file));
         readfile($file);
         exit;
+    }
+
+    public function upload_backup() {
+        check_ajax_referer('vsc_backup_nonce', 'nonce');
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(['message' => 'Unauthorized']);
+        }
+
+        if (empty($_FILES['backup_file'])) {
+            wp_send_json_error(['message' => 'No file uploaded']);
+        }
+
+        $file = $_FILES['backup_file'];
+
+        // Validate file type
+        $allowed_types = ['application/zip', 'application/x-zip-compressed'];
+        $file_type = mime_content_type($file['tmp_name']);
+
+        if (!in_array($file_type, $allowed_types) && pathinfo($file['name'], PATHINFO_EXTENSION) !== 'zip') {
+            wp_send_json_error(['message' => 'Invalid file type. Only .zip files are allowed.']);
+        }
+
+        // Validate file size (max 500MB)
+        $max_size = 500 * 1024 * 1024; // 500MB
+        if ($file['size'] > $max_size) {
+            wp_send_json_error(['message' => 'File too large. Maximum size is 500MB.']);
+        }
+
+        try {
+            $engine = VSC_Backup_Engine::get_instance();
+            $backup_dir = $engine->get_backup_dir();
+
+            // Generate unique backup ID
+            $backup_id = date('Y-m-d_H-i-s') . '_imported_' . substr(md5(uniqid()), 0, 6);
+            $backup_file = $backup_dir . "/backup_{$backup_id}.zip";
+
+            // Move uploaded file
+            if (!move_uploaded_file($file['tmp_name'], $backup_file)) {
+                throw new Exception('Failed to save uploaded file');
+            }
+
+            // Save metadata
+            $metadata = [
+                'id' => $backup_id,
+                'file' => basename($backup_file),
+                'size' => filesize($backup_file),
+                'date' => current_time('mysql'),
+                'site_url' => 'Imported',
+                'imported' => true
+            ];
+
+            $all_backups = get_option('vsc_backups_metadata', []);
+            $all_backups[] = $metadata;
+            update_option('vsc_backups_metadata', $all_backups);
+
+            wp_send_json_success([
+                'message' => 'Backup uploaded successfully',
+                'backup' => $metadata
+            ]);
+
+        } catch (Exception $e) {
+            error_log('VSC Upload Error: ' . $e->getMessage());
+            wp_send_json_error(['message' => $e->getMessage()]);
+        }
     }
 }

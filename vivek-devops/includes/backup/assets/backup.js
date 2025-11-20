@@ -98,4 +98,49 @@ jQuery(document).ready(function($) {
             }
         });
     });
+
+    // Upload backup
+    $('#vsc-upload-form').on('submit', function(e) {
+        e.preventDefault();
+
+        var fileInput = $('#vsc-backup-file')[0];
+        if (!fileInput.files.length) {
+            alert('Please select a backup file');
+            return;
+        }
+
+        var formData = new FormData();
+        formData.append('action', 'vsc_upload_backup');
+        formData.append('nonce', vscBackup.nonce);
+        formData.append('backup_file', fileInput.files[0]);
+
+        var $progress = $('#vsc-upload-progress');
+        var $btn = $(this).find('button');
+
+        $btn.prop('disabled', true);
+        $progress.show();
+
+        $.ajax({
+            url: vscBackup.ajax_url,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.success) {
+                    alert('Backup uploaded successfully! You can now restore it.');
+                    location.reload();
+                } else {
+                    alert('Error: ' + response.data.message);
+                }
+            },
+            error: function() {
+                alert('Failed to upload backup');
+            },
+            complete: function() {
+                $btn.prop('disabled', false);
+                $progress.hide();
+            }
+        });
+    });
 });
