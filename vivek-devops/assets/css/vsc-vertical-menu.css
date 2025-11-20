@@ -1,0 +1,261 @@
+/**
+ * VSC Vertical Menu Styles
+ * Customizes WordPress default left sidebar with dark theme and Vivek DevOps branding
+ * Note: Global color overrides are now handled via PHP in class-vsc-color-scheme.php
+ */
+
+/* ===== ADMIN MENU BACKGROUND ===== */
+#adminmenuback,
+#adminmenuwrap {
+    background: linear-gradient(180deg, #0a0a0a 0%, #000000 100%) !important;
+}
+
+#adminmenu {
+    background: transparent !important;
+}
+
+/* ===== MENU ITEMS ===== */
+#adminmenu li.menu-top {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    margin: 0;
+    position: relative;
+}
+
+/* Add subtle left border accent on hover */
+#adminmenu li.menu-top::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: #3b82f6;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+#adminmenu li.menu-top:hover::before,
+#adminmenu li.current::before,
+#adminmenu li.wp-has-current-submenu::before {
+    opacity: 1;
+}
+
+#adminmenu .wp-submenu {
+    background: rgba(0, 0, 0, 0.5) !important;
+    border-left: 3px solid #3b82f6;
+}
+
+/* Menu item text */
+#adminmenu a {
+    color: #cccccc !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    padding: 12px 15px !important;
+    transition: all 0.2s ease;
+}
+
+#adminmenu .wp-submenu a {
+    color: #999999 !important;
+    padding: 10px 15px 10px 25px !important;
+}
+
+/* ===== HOVER STATES ===== */
+#adminmenu li.menu-top:hover,
+#adminmenu li.opensub > a.menu-top,
+#adminmenu li > a.menu-top:focus {
+    background: #1a1a1a !important;
+    color: #ffffff !important;
+}
+
+#adminmenu li.menu-top:hover > a,
+#adminmenu li.opensub > a.menu-top,
+#adminmenu li > a.menu-top:focus {
+    color: #ffffff !important;
+}
+
+#adminmenu .wp-submenu a:hover,
+#adminmenu .wp-submenu a:focus {
+    background: #1a1a1a !important;
+    color: #3b82f6 !important;
+}
+
+/* ===== CURRENT/ACTIVE STATES ===== */
+#adminmenu .wp-has-current-submenu .wp-submenu .wp-submenu-head,
+#adminmenu .wp-menu-arrow,
+#adminmenu .wp-has-current-submenu a.wp-has-current-submenu,
+#adminmenu li.current a.menu-top,
+#adminmenu .wp-has-current-submenu .wp-submenu a,
+.folded #adminmenu .wp-has-current-submenu .wp-submenu a {
+    color: #ffffff !important;
+}
+
+#adminmenu li.wp-has-current-submenu a.wp-has-current-submenu,
+#adminmenu li.current a.menu-top {
+    background: linear-gradient(135deg, #3b82f6, #1e40af) !important;
+    color: #ffffff !important;
+}
+
+#adminmenu .wp-has-current-submenu a.wp-has-current-submenu:hover,
+#adminmenu li.current a.menu-top:hover {
+    background: linear-gradient(135deg, #4a92ff, #2e50bf) !important;
+    color: #ffffff !important;
+}
+
+#adminmenu .wp-has-current-submenu.opensub .wp-submenu li.current a,
+#adminmenu a.wp-has-current-submenu:focus + .wp-submenu li.current a {
+    background: #1a1a1a !important;
+    color: #3b82f6 !important;
+}
+
+/* Current submenu item */
+#adminmenu .wp-submenu li.current a,
+#adminmenu .wp-submenu li.current a:hover,
+#adminmenu .wp-submenu li.current a:focus {
+    color: #3b82f6 !important;
+    font-weight: 600;
+}
+
+/* ===== MENU ICONS ===== */
+#adminmenu div.wp-menu-image:before,
+#adminmenu .wp-menu-image img {
+    color: #cccccc !important;
+    opacity: 0.8;
+}
+
+#adminmenu li.menu-top:hover div.wp-menu-image:before,
+#adminmenu li.menu-top:hover .wp-menu-image img,
+#adminmenu li.opensub > a.menu-top div.wp-menu-image:before,
+#adminmenu li.opensub > a.menu-top .wp-menu-image img,
+#adminmenu li.menu-top:focus div.wp-menu-image:before,
+#adminmenu li.menu-top:focus .wp-menu-image img {
+    color: #3b82f6 !important;
+    opacity: 1 !important;
+}
+
+#adminmenu .wp-has-current-submenu div.wp-menu-image:before,
+#adminmenu .wp-has-current-submenu .wp-menu-image img,
+#adminmenu .current div.wp-menu-image:before,
+#adminmenu .current .wp-menu-image img,
+#adminmenu .wp-has-current-submenu:hover div.wp-menu-image:before,
+#adminmenu .wp-has-current-submenu:hover .wp-menu-image img {
+    color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+/* ===== COLLAPSE BUTTON ===== */
+#collapse-button {
+    color: #cccccc !important;
+}
+
+#collapse-button:hover,
+#collapse-button:focus {
+    color: #3b82f6 !important;
+}
+
+/* ===== SEPARATOR ===== */
+#adminmenu li.wp-menu-separator {
+    background: #1a1a1a;
+    border-color: #1a1a1a;
+    height: 1px;
+    margin: 0;
+}
+
+/* ===== SEARCH BOX (if present) ===== */
+#adminmenu .wp-menu-search {
+    background: #000000 !important;
+    border-color: #1a1a1a !important;
+}
+
+#adminmenu .wp-menu-search input[type="search"] {
+    background: #1a1a1a !important;
+    border-color: #2a2a2a !important;
+    color: #ffffff !important;
+}
+
+/* ===== ADMIN BAR (TOP) ===== */
+#wpadminbar {
+    background: #0a0a0a !important;
+}
+
+#wpadminbar .ab-item,
+#wpadminbar a.ab-item,
+#wpadminbar > #wp-toolbar span.ab-label,
+#wpadminbar > #wp-toolbar span.noticon {
+    color: #cccccc !important;
+}
+
+#wpadminbar .ab-top-menu > li:hover > .ab-item,
+#wpadminbar .ab-top-menu > li.hover > .ab-item,
+#wpadminbar .ab-top-menu > li > .ab-item:focus,
+#wpadminbar.nojq .quicklinks .ab-top-menu > li > .ab-item:focus {
+    background: #1a1a1a !important;
+    color: #3b82f6 !important;
+}
+
+#wpadminbar .ab-submenu {
+    background: #0a0a0a !important;
+}
+
+#wpadminbar .ab-submenu .ab-item,
+#wpadminbar .ab-submenu a.ab-item {
+    color: #cccccc !important;
+}
+
+#wpadminbar .ab-submenu .ab-item:hover,
+#wpadminbar .ab-submenu a.ab-item:hover {
+    background: #1a1a1a !important;
+    color: #3b82f6 !important;
+}
+
+/* ===== CONTENT AREA BACKGROUND ===== */
+body.wp-admin {
+    background: #000000 !important;
+}
+
+#wpbody-content {
+    background: #000000 !important;
+}
+
+/* ===== WELCOME PANEL (if shown) ===== */
+.welcome-panel {
+    background: #0a0a0a !important;
+    border: 1px solid #1a1a1a !important;
+}
+
+.welcome-panel h2 {
+    color: #ffffff !important;
+}
+
+.welcome-panel p {
+    color: #cccccc !important;
+}
+
+/* ===== RESPONSIVE - FOLDED MENU ===== */
+@media only screen and (max-width: 960px) {
+    .auto-fold #vsc-sidebar-logo {
+        width: 36px;
+    }
+
+    .auto-fold #vsc-sidebar-logo span {
+        display: none;
+    }
+
+    .auto-fold #vsc-sidebar-logo svg {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+.folded #vsc-sidebar-logo span {
+    display: none;
+}
+
+.folded #vsc-sidebar-logo {
+    justify-content: center;
+    width: 36px;
+}
+
+.folded #vsc-sidebar-logo svg {
+    width: 24px;
+    height: 24px;
+}
