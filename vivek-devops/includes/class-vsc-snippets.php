@@ -95,7 +95,6 @@ class VSC_Snippets {
         register_post_type('vsc_snippet', $args);
     }
 
-
     /**
      * Add admin menu items under Vivek DevOps
      */
@@ -481,23 +480,17 @@ class VSC_Snippets {
 
             case 'php':
                 // Execute PHP code - restricted to administrators with manage_options capability
-                add_action('init', function() use ($code, $snippet_id) {
+                $snippet_id_for_action = $snippet_id;
+                add_action('init', function() use ($code, $snippet_id_for_action) {
                     if (current_user_can('manage_options')) {
                         try {
-                            // Execute code
-                            // The closing tag ?> handles mixed HTML/PHP correctly
                             $result = eval('?>' . $code);
-
                             if (false === $result && error_get_last()) {
                                 throw new Exception('Snippet execution failed');
                             }
                         } catch (Throwable $e) {
-                            // 1. Catch the error so site doesn't crash
-                            // 2. Auto-deactivate this specific snippet
-                            update_post_meta($snippet_id, '_vsc_snippet_active', '0');
-
-                            // 3. Log error for admin
-                            error_log("VSC Panic: Snippet $snippet_id deactivated. Error: " . $e->getMessage());
+                            update_post_meta($snippet_id_for_action, '_vsc_snippet_active', '0');
+                            error_log("VSC Panic: Snippet $snippet_id_for_action deactivated. Error: " . $e->getMessage());
                         }
                     }
                 }, $priority);
@@ -538,17 +531,12 @@ class VSC_Snippets {
                 // Execute PHP code - restricted to administrators
                 if (current_user_can('manage_options')) {
                     try {
-                        // Execute code with safety wrapper
                         $result = eval('?>' . $code);
-
                         if (false === $result && error_get_last()) {
                             throw new Exception('Snippet execution failed');
                         }
                     } catch (Throwable $e) {
-                        // Auto-deactivate this specific snippet
                         update_post_meta($snippet_id, '_vsc_snippet_active', '0');
-
-                        // Log error for admin
                         error_log("VSC Panic: Snippet $snippet_id deactivated in shortcode. Error: " . $e->getMessage());
                     }
                 }
