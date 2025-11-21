@@ -42,6 +42,14 @@ class VSC_Migration_Main_Controller {
 		// Activate hooks
 		$this->activate_actions();
 		$this->activate_filters();
+
+		// If plugins_loaded has already fired, call vsc_migration_loaded directly
+		if ( did_action( 'plugins_loaded' ) ) {
+			$this->vsc_migration_loaded();
+			$this->vsc_migration_commands();
+			$this->vsc_migration_buttons();
+			$this->wp_cli();
+		}
 	}
 
 	/**
