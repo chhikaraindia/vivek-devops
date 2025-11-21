@@ -217,18 +217,6 @@ class VSC_Snippets {
             return;
         }
 
-        // Add security notice for PHP snippets
-        add_action('admin_notices', function() {
-            $screen = get_current_screen();
-            if ($screen && $screen->post_type === 'vsc_snippet') {
-                ?>
-                <div class="notice notice-warning">
-                    <p><strong>Security Notice:</strong> PHP snippet execution has been disabled for security. Use WordPress action/filter hooks in your theme's functions.php instead.</p>
-                </div>
-                <?php
-            }
-        });
-
         // CodeMirror
         wp_enqueue_code_editor(array('type' => 'text/html'));
         wp_enqueue_script('wp-theme-plugin-editor');
@@ -589,10 +577,12 @@ class VSC_Snippets {
                 break;
 
             case 'php':
-                // PHP execution disabled for security
-                if (WP_DEBUG && current_user_can('manage_options')) {
-                    echo '<!-- VSC: PHP snippets disabled for security. Use WordPress hooks in functions.php instead. -->';
-                }
+                // Execute PHP code - restricted to administrators with manage_options capability
+                add_action('init', function() use ($code) {
+                    if (current_user_can('manage_options')) {
+                        eval('?>' . $code);
+                    }
+                }, $priority);
                 break;
         }
     }
@@ -627,9 +617,9 @@ class VSC_Snippets {
                 echo $code;
                 break;
             case 'php':
-                // PHP execution disabled for security
-                if (WP_DEBUG && current_user_can('manage_options')) {
-                    echo '<!-- VSC: PHP snippets disabled -->';
+                // Execute PHP code - restricted to administrators
+                if (current_user_can('manage_options')) {
+                    eval('?>' . $code);
                 }
                 break;
         }
