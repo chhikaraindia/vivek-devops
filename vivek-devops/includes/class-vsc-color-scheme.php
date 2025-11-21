@@ -189,6 +189,49 @@ class VSC_Color_Scheme {
         // Pagination Links
         $css .= '.tablenav-pages a{color:#3b82f6!important}';
 
+        // AGGRESSIVE #53bfff ELIMINATION - Target all possible WordPress elements
+        // Override inline styles with #53bfff
+        $css .= '[style*="color:#53bfff"],[style*="color: #53bfff"]{color:#3b82f6!important}';
+        $css .= '[style*="background:#53bfff"],[style*="background-color:#53bfff"]{background:#3b82f6!important;background-color:#3b82f6!important}';
+        $css .= '[style*="border-color:#53bfff"]{border-color:#3b82f6!important}';
+
+        // Target all anchor elements across the entire admin
+        $css .= '.wp-admin a:not(.button-primary){color:#3b82f6!important}';
+        $css .= '.wp-admin a:not(.button-primary):visited{color:#3b82f6!important}';
+        $css .= '.wp-admin a:not(.button-primary):hover{color:#ffffff!important}';
+
+        // Target all table links and content
+        $css .= '.wp-list-table tbody tr td a,.wp-list-table tbody tr .row-title{color:#3b82f6!important}';
+        $css .= '.wp-list-table tbody tr td a:hover{color:#ffffff!important}';
+        $css .= '.wp-list-table td.column-title strong,.wp-list-table td.plugin-title strong{color:#3b82f6!important}';
+        $css .= '.wp-list-table .row-actions a,.wp-list-table .row-actions span{color:#3b82f6!important}';
+
+        // Target plugin and theme row actions
+        $css .= 'tr .plugin-title a,tr .theme-title a,.plugins .inactive a{color:#3b82f6!important}';
+        $css .= '.plugin-action-buttons a,.theme-actions a{color:#3b82f6!important}';
+
+        // Target post and page list tables
+        $css .= '.type-post .row-title,.type-page .row-title{color:#3b82f6!important}';
+        $css .= '.post-state,.post-count,.count{color:#3b82f6!important}';
+
+        // Target settings and option page links
+        $css .= '.form-table a,.option-site-visibility a{color:#3b82f6!important}';
+
+        // Target dashboard widgets
+        $css .= '#dashboard-widgets a,.activity-block a{color:#3b82f6!important}';
+        $css .= '.rss-widget a,.dashboard-comment-wrap a{color:#3b82f6!important}';
+
+        // Target subsubsub filter links
+        $css .= '.subsubsub a,.subsubsub .current{color:#3b82f6!important}';
+
+        // Target view and edit links
+        $css .= '.view a,.edit a,.delete a{color:#3b82f6!important}';
+
+        // Nuclear option - Override WordPress default link color globally
+        $css .= 'body.wp-admin a{color:#3b82f6!important}';
+        $css .= 'body.wp-admin a:hover{color:#ffffff!important}';
+        $css .= 'body.wp-admin .button-primary{background:#3b82f6!important;color:#ffffff!important}';
+
         // Minify the CSS (remove comments and extra whitespace)
         $css = preg_replace('#/\*.*?\*/#s', '', $css);
         $css = preg_replace('/\s*([{}|:;,])\s+/', '$1', $css);

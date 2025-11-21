@@ -195,7 +195,7 @@ class VSC_Vertical_Menu {
                     <div id="vsc-top-bar">
                         <div id="vsc-top-bar-logo">
                             <a href="<?php echo esc_url(admin_url('admin.php?page=vsc-dashboard')); ?>">
-                                <img src="<?php echo esc_url(VSC_URL . 'assets/images/new logo vsc devops.png'); ?>"
+                                <img src="<?php echo esc_url(VSC_URL . 'assets/images/final logo.png.png'); ?>"
                                      alt="Vivek DevOps"
                                      class="vsc-logo-img">
                                 <span>Vivek DevOps</span>

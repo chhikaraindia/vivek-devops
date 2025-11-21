@@ -210,7 +210,7 @@ if (!isset($current_user) || !isset($features)) {
         <!-- Header -->
         <div class="vsc-dashboard-header">
             <div class="vsc-dashboard-header-content">
-                <img src="<?php echo esc_url(VSC_URL . 'assets/images/new logo vsc devops.png'); ?>"
+                <img src="<?php echo esc_url(VSC_URL . 'assets/images/final logo.png.png'); ?>"
                      alt="Vivek DevOps"
                      class="vsc-dashboard-logo"
                      style="height: 50px; width: auto;">

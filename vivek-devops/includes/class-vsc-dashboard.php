@@ -64,6 +64,18 @@ class VSC_Dashboard {
             'update_core',
             'update-core.php'
         );
+
+        add_submenu_page(
+            'vsc-dashboard',
+            'Settings',
+            'Settings',
+            'manage_options',
+            'vsc-settings',
+            [$this, 'render_settings']
+        );
+
+        // Handle settings form submission
+        add_action('admin_init', [$this, 'handle_settings_save']);
     }
 
     /**
@@ -275,5 +287,115 @@ class VSC_Dashboard {
     public function redirect_to_vsc_dashboard() {
         wp_redirect(admin_url('admin.php?page=vsc-dashboard'));
         exit;
+    }
+
+    /**
+     * Handle settings save
+     */
+    public function handle_settings_save() {
+        if (!isset($_POST['vsc_settings_nonce']) || !wp_verify_nonce($_POST['vsc_settings_nonce'], 'vsc_save_settings')) {
+            return;
+        }
+
+        if (!current_user_can('manage_options')) {
+            return;
+        }
+
+        if (isset($_POST['vsc_super_admin_2'])) {
+            $admin_2_email = sanitize_email($_POST['vsc_super_admin_2']);
+            update_option('vsc_super_admin_2', $admin_2_email);
+            add_settings_error('vsc_settings', 'settings_updated', 'Settings saved successfully!', 'success');
+        }
+    }
+
+    /**
+     * Render settings page
+     */
+    public function render_settings() {
+        if (!current_user_can('manage_options')) {
+            wp_die('You do not have sufficient permissions to access this page.');
+        }
+
+        $admin_1 = get_option('vsc_super_admin_1', '');
+        $admin_2 = get_option('vsc_super_admin_2', '');
+        $hardcoded = 'support@chhikara.in';
+
+        settings_errors('vsc_settings');
+        ?>
+        <div class="wrap" style="max-width: 800px;">
+            <h1>Vivek DevOps Settings</h1>
+
+            <div style="background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 8px; padding: 30px; margin-top: 20px;">
+                <h2 style="color: #ffffff; margin-top: 0;">God Mode Admin Management</h2>
+                <p style="color: #cccccc; margin-bottom: 30px;">
+                    God Mode admins have full access to all WordPress features. Other admins will have restricted access.
+                </p>
+
+                <div style="background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 6px; padding: 20px; margin-bottom: 30px;">
+                    <h3 style="color: #3b82f6; margin-top: 0;">Current God Mode Admins:</h3>
+
+                    <div style="margin-bottom: 15px;">
+                        <strong style="color: #ffffff;">Admin 1 (Auto-captured on activation):</strong><br>
+                        <code style="background: #0a0a0a; padding: 5px 10px; border-radius: 4px; color: #10b981; display: inline-block; margin-top: 5px;">
+                            <?php echo esc_html($admin_1 ? $admin_1 : 'Not set'); ?>
+                        </code>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <strong style="color: #ffffff;">Admin 2 (Configurable):</strong><br>
+                        <code style="background: #0a0a0a; padding: 5px 10px; border-radius: 4px; color: <?php echo $admin_2 ? '#10b981' : '#999'; ?>; display: inline-block; margin-top: 5px;">
+                            <?php echo esc_html($admin_2 ? $admin_2 : 'Not set'); ?>
+                        </code>
+                    </div>
+
+                    <div>
+                        <strong style="color: #ffffff;">Admin 3 (Hardcoded):</strong><br>
+                        <code style="background: #0a0a0a; padding: 5px 10px; border-radius: 4px; color: #10b981; display: inline-block; margin-top: 5px;">
+                            <?php echo esc_html($hardcoded); ?>
+                        </code>
+                    </div>
+                </div>
+
+                <form method="post" action="">
+                    <?php wp_nonce_field('vsc_save_settings', 'vsc_settings_nonce'); ?>
+
+                    <table class="form-table" style="background: transparent;">
+                        <tr>
+                            <th scope="row" style="color: #ffffff; padding-left: 0;">
+                                <label for="vsc_super_admin_2">Admin 2 Email</label>
+                            </th>
+                            <td>
+                                <input type="email"
+                                       id="vsc_super_admin_2"
+                                       name="vsc_super_admin_2"
+                                       value="<?php echo esc_attr($admin_2); ?>"
+                                       class="regular-text"
+                                       placeholder="admin2@example.com"
+                                       style="background: #0a0a0a; border: 1px solid #2a2a2a; color: #ffffff; padding: 8px 12px;">
+                                <p class="description" style="color: #999;">
+                                    Enter the email address for the second God Mode admin. Leave empty to remove.
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <p class="submit" style="padding-left: 0;">
+                        <button type="submit" class="button button-primary" style="background: linear-gradient(135deg, #3b82f6, #1e40af); border: none; padding: 10px 20px; font-size: 14px; font-weight: 600;">
+                            Save Settings
+                        </button>
+                    </p>
+                </form>
+
+                <div style="background: #1a1a1a; border-left: 3px solid #0ea5e9; padding: 15px; margin-top: 30px; border-radius: 4px;">
+                    <h4 style="color: #0ea5e9; margin-top: 0;">ℹ️ Access Control Rules:</h4>
+                    <ul style="color: #cccccc; margin-bottom: 0;">
+                        <li><strong>God Mode Admins:</strong> Full access to all WordPress features</li>
+                        <li><strong>Restricted Admins:</strong> Can only access VSC Dashboard, Blogs, Media, Pages, Comments, and Store</li>
+                        <li><strong>Hidden from restricted admins:</strong> Appearance, Plugins, Users, Tools, WP Settings</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <?php
     }
 }
