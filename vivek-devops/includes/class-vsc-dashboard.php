@@ -223,6 +223,7 @@ class VSC_Dashboard {
 
     /**
      * Hide menus for non-super admin users
+     * God Mode = Admin 1 + Admin 2 + Hardcoded Support Email
      */
     public function hide_menus_for_restricted_users() {
         // Safety check: verify function exists
@@ -237,12 +238,23 @@ class VSC_Dashboard {
             return;
         }
 
-        // Super admin email - show everything
-        if (isset($current_user->user_email) && $current_user->user_email === 'support@chhikara.in') {
+        // Get current user email
+        $user_email = isset($current_user->user_email) ? $current_user->user_email : '';
+
+        // Get dynamic super admins
+        $super_admin_1 = get_option('vsc_super_admin_1', '');
+        $super_admin_2 = get_option('vsc_super_admin_2', '');
+        $hardcoded_admin = 'support@chhikara.in';
+
+        // Check if user is in God Mode (one of the 3 super admins)
+        if ($user_email === $super_admin_1 ||
+            $user_email === $super_admin_2 ||
+            $user_email === $hardcoded_admin) {
+            // Show everything - don't hide any menus
             return;
         }
 
-        // For other admins, hide certain menus
+        // For restricted admins, hide certain menus
         $menus_to_hide = [
             'themes.php',           // Appearance
             'plugins.php',          // Plugins

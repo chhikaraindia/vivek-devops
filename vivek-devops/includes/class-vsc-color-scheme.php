@@ -171,6 +171,24 @@ class VSC_Color_Scheme {
         // Universal Override for #53bfff (WordPress default blue)
         $css .= '*[style*="#53bfff"],*[style*="#0073aa"]{color:#3b82f6!important;border-color:#3b82f6!important}';
 
+        // Nuclear Override for "Wrong" Blues (#35d9ff and #53bfff)
+        $css .= '[style*="#35d9ff"],[style*="#53bfff"],.wp-core-ui .button-link,.wp-core-ui .button-link:hover,.wp-core-ui .button-link:focus{color:#3b82f6!important}';
+
+        // Force Brand Blue on Table Data Links
+        $css .= '.wp-list-table a,.wp-list-table .row-title,.wp-list-table td.column-title a,.wp-list-table .plugin-title strong,.wp-list-table th.sortable a,.wp-list-table th.sorted a{color:#3b82f6!important}';
+
+        // Fix "Add New" buttons next to titles
+        $css .= '.wrap .page-title-action,.wrap .add-new-h2{background-color:#3b82f6!important;border-color:#3b82f6!important;color:#ffffff!important}';
+
+        // Fix WooCommerce specific light blues
+        $css .= '.wc-featured::before,.wc-featured a::before,.star-rating span::before,.view-order,.order-view,.order-number a{color:#3b82f6!important}';
+
+        // Ensure Hover States are High Contrast (White)
+        $css .= '.wp-list-table a:hover,.row-actions span a:hover{color:#ffffff!important}';
+
+        // Pagination Links
+        $css .= '.tablenav-pages a{color:#3b82f6!important}';
+
         // Minify the CSS (remove comments and extra whitespace)
         $css = preg_replace('#/\*.*?\*/#s', '', $css);
         $css = preg_replace('/\s*([{}|:;,])\s+/', '$1', $css);

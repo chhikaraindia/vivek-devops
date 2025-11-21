@@ -210,12 +210,13 @@ if (!isset($current_user) || !isset($features)) {
         <!-- Header -->
         <div class="vsc-dashboard-header">
             <div class="vsc-dashboard-header-content">
-                <img src="<?php echo esc_url(VSC_URL . 'assets/images/logo-vsc-devops.png'); ?>"
-                     alt="Vivek DevOps Logo"
-                     class="vsc-dashboard-logo">
-                <div class="vsc-dashboard-text">
-                    <h1>🛡️ Vivek DevOps Security Layer</h1>
-                    <p>Comprehensive security and development platform for developers</p>
+                <img src="<?php echo esc_url(VSC_URL . 'assets/images/new logo vsc devops.png'); ?>"
+                     alt="Vivek DevOps"
+                     class="vsc-dashboard-logo"
+                     style="height: 50px; width: auto;">
+                <div class="vsc-dashboard-text" style="display: flex; align-items: baseline; gap: 15px; flex-wrap: wrap;">
+                    <h1 style="margin: 0; font-size: 28px; line-height: 1;">Vivek DevOps Security Layer</h1>
+                    <p style="margin: 0; font-size: 14px; opacity: 0.8;">Comprehensive security and development platform for developers</p>
                 </div>
             </div>
         </div>
