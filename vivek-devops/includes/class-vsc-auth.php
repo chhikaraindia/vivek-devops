@@ -125,16 +125,18 @@ class VSC_Auth {
             return;
         }
 
-        session_start([
-            'cookie_lifetime' => 0,
-            'cookie_secure' => is_ssl(),
-            'cookie_httponly' => true,
-            'cookie_samesite' => 'Strict',
-            'use_strict_mode' => true,
-            'use_only_cookies' => true,
-            'cookie_path' => COOKIEPATH,
-            'cookie_domain' => COOKIE_DOMAIN
-        ]);
+        if (!headers_sent()) {
+            session_start([
+                'cookie_lifetime' => 0,
+                'cookie_secure' => is_ssl(),
+                'cookie_httponly' => true,
+                'cookie_samesite' => 'Strict',
+                'use_strict_mode' => true,
+                'use_only_cookies' => true,
+                'cookie_path' => COOKIEPATH,
+                'cookie_domain' => COOKIE_DOMAIN
+            ]);
+        }
     }
 
     /**

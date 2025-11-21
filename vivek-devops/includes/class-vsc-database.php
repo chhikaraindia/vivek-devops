@@ -17,6 +17,22 @@ class VSC_Database {
 
     private function __construct() {
         register_activation_hook(VSC_PATH . 'vivek-devops.php', [$this, 'create_tables']);
+        add_action('admin_init', [$this, 'check_and_create_tables']);
+    }
+
+    /**
+     * Check if tables exist and create them if missing
+     */
+    public function check_and_create_tables() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'vsc_honeypot_logs';
+
+        // Check if table exists
+        $table_exists = $wpdb->get_var("SHOW TABLES LIKE '$table_name'") === $table_name;
+
+        if (!$table_exists) {
+            $this->create_tables();
+        }
     }
 
     /**
