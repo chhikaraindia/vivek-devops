@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Vivek DevOps
  * Description: Vivek DevOps is a comprehensive DevSecOps suite for developers, crafted to transform backend management into a streamlined, secure, and developer-centric experience. It integrates security enforcement, custom branding, UI customization, user access policies, and critical infrastructure tooling into a single lightweight framework.
- * Version: 33.0.2
+ * Version: 33.1
  * Author: Vivek Chhikara
  * Author URI: https://vivekchhikara.com
  */
@@ -10,7 +10,7 @@
 if (!defined('ABSPATH')) exit;
 
 // Plugin version
-define('VSC_VERSION', '33.0.2');
+define('VSC_VERSION', '33.1');
 define('VSC_NAME', 'Vivek DevOps');
 define('VSC_PATH', plugin_dir_path(__FILE__));
 define('VSC_URL', plugin_dir_url(__FILE__));
@@ -26,26 +26,6 @@ require_once VSC_PATH . 'includes/class-vsc-dashboard.php';
 require_once VSC_PATH . 'includes/class-vsc-snippets.php';
 require_once VSC_PATH . 'includes/class-vsc-color-scheme.php';
 
-// Load migration module (All-in-One WP Migration fork)
-if (!defined('VSC_MIGRATION_PLUGIN_BASENAME')) {
-    define('VSC_MIGRATION_PLUGIN_BASENAME', 'vivek-devops/includes/migration/migration.php');
-}
-if (!defined('VSC_MIGRATION_PATH')) {
-    define('VSC_MIGRATION_PATH', VSC_PATH . 'includes/migration');
-}
-if (!defined('VSC_MIGRATION_URL')) {
-    define('VSC_MIGRATION_URL', VSC_URL . 'includes/migration');
-}
-if (!defined('VSC_MIGRATION_STORAGE_URL')) {
-    define('VSC_MIGRATION_STORAGE_URL', VSC_MIGRATION_URL . '/storage');
-}
-
-require_once VSC_PATH . 'includes/migration/constants.php';
-require_once VSC_PATH . 'includes/migration/deprecated.php';
-require_once VSC_PATH . 'includes/migration/functions.php';
-require_once VSC_PATH . 'includes/migration/exceptions.php';
-require_once VSC_PATH . 'includes/migration/loader.php';
-
 // Initialize
 function vsc_init() {
     VSC_Database::get_instance();
@@ -55,11 +35,6 @@ function vsc_init() {
     VSC_Dashboard::get_instance();
     VSC_Snippets::get_instance();
     VSC_Color_Scheme::get_instance();
-
-    // Initialize migration system
-    if (is_admin()) {
-        new VSC_Migration_Main_Controller();
-    }
 
     // Enqueue admin styles
     add_action('admin_enqueue_scripts', 'vsc_enqueue_styles');
