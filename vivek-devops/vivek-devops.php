@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Vivek DevOps
  * Description: Vivek DevOps is a comprehensive DevSecOps suite for developers, crafted to transform backend management into a streamlined, secure, and developer-centric experience. It integrates security enforcement, custom branding, UI customization, user access policies, and critical infrastructure tooling into a single lightweight framework.
- * Version: 9.0
+ * Version: 9.1
  * Author: Vivek Chhikara
  * Author URI: https://vivekchhikara.com
  */
@@ -10,7 +10,7 @@
 if (!defined('ABSPATH')) exit;
 
 // Plugin version
-define('VSC_VERSION', '9.0');
+define('VSC_VERSION', '9.1');
 define('VSC_NAME', 'Vivek DevOps');
 define('VSC_PATH', plugin_dir_path(__FILE__));
 define('VSC_URL', plugin_dir_url(__FILE__));
@@ -25,6 +25,17 @@ require_once VSC_PATH . 'includes/class-vsc-auth.php';
 require_once VSC_PATH . 'includes/class-vsc-dashboard.php';
 require_once VSC_PATH . 'includes/class-vsc-snippets.php';
 require_once VSC_PATH . 'includes/class-vsc-color-scheme.php';
+
+// Activation hook to capture Admin 1
+register_activation_hook(__FILE__, function() {
+    // If Admin 1 isn't set yet, capture the current user
+    if (!get_option('vsc_super_admin_1')) {
+        $user = wp_get_current_user();
+        if ($user && $user->exists()) {
+            update_option('vsc_super_admin_1', $user->user_email);
+        }
+    }
+});
 
 // Initialize
 function vsc_init() {

@@ -18,11 +18,15 @@ class VSC_Color_Scheme {
 
     private function __construct() {
         // Inject inline color overrides using Adminify's approach
-        // Using admin_enqueue_scripts with priority 99999 ensures our styles load last
-        add_action('admin_enqueue_scripts', [$this, 'inject_color_overrides'], 99999);
+        // Using admin_enqueue_scripts with priority 999999 ensures our styles load absolutely last
+        add_action('admin_enqueue_scripts', [$this, 'inject_color_overrides'], 999999);
+
+        // Also inject at admin_head and admin_footer for maximum coverage
+        add_action('admin_head', [$this, 'inject_color_overrides'], 999999);
+        add_action('admin_footer', [$this, 'inject_aggressive_overrides'], 999999);
 
         // Also apply to login page
-        add_action('login_enqueue_scripts', [$this, 'inject_color_overrides'], 99999);
+        add_action('login_enqueue_scripts', [$this, 'inject_color_overrides'], 999999);
     }
 
     /**
@@ -171,6 +175,67 @@ class VSC_Color_Scheme {
         // Universal Override for #53bfff (WordPress default blue)
         $css .= '*[style*="#53bfff"],*[style*="#0073aa"]{color:#3b82f6!important;border-color:#3b82f6!important}';
 
+        // Nuclear Override for "Wrong" Blues (#35d9ff and #53bfff)
+        $css .= '[style*="#35d9ff"],[style*="#53bfff"],.wp-core-ui .button-link,.wp-core-ui .button-link:hover,.wp-core-ui .button-link:focus{color:#3b82f6!important}';
+
+        // Force Brand Blue on Table Data Links
+        $css .= '.wp-list-table a,.wp-list-table .row-title,.wp-list-table td.column-title a,.wp-list-table .plugin-title strong,.wp-list-table th.sortable a,.wp-list-table th.sorted a{color:#3b82f6!important}';
+
+        // Fix "Add New" buttons next to titles
+        $css .= '.wrap .page-title-action,.wrap .add-new-h2{background-color:#3b82f6!important;border-color:#3b82f6!important;color:#ffffff!important}';
+
+        // Fix WooCommerce specific light blues
+        $css .= '.wc-featured::before,.wc-featured a::before,.star-rating span::before,.view-order,.order-view,.order-number a{color:#3b82f6!important}';
+
+        // Ensure Hover States are High Contrast (White)
+        $css .= '.wp-list-table a:hover,.row-actions span a:hover{color:#ffffff!important}';
+
+        // Pagination Links
+        $css .= '.tablenav-pages a{color:#3b82f6!important}';
+
+        // AGGRESSIVE #53bfff ELIMINATION - Target all possible WordPress elements
+        // Override inline styles with #53bfff
+        $css .= '[style*="color:#53bfff"],[style*="color: #53bfff"]{color:#3b82f6!important}';
+        $css .= '[style*="background:#53bfff"],[style*="background-color:#53bfff"]{background:#3b82f6!important;background-color:#3b82f6!important}';
+        $css .= '[style*="border-color:#53bfff"]{border-color:#3b82f6!important}';
+
+        // Target all anchor elements across the entire admin
+        $css .= '.wp-admin a:not(.button-primary){color:#3b82f6!important}';
+        $css .= '.wp-admin a:not(.button-primary):visited{color:#3b82f6!important}';
+        $css .= '.wp-admin a:not(.button-primary):hover{color:#ffffff!important}';
+
+        // Target all table links and content
+        $css .= '.wp-list-table tbody tr td a,.wp-list-table tbody tr .row-title{color:#3b82f6!important}';
+        $css .= '.wp-list-table tbody tr td a:hover{color:#ffffff!important}';
+        $css .= '.wp-list-table td.column-title strong,.wp-list-table td.plugin-title strong{color:#3b82f6!important}';
+        $css .= '.wp-list-table .row-actions a,.wp-list-table .row-actions span{color:#3b82f6!important}';
+
+        // Target plugin and theme row actions
+        $css .= 'tr .plugin-title a,tr .theme-title a,.plugins .inactive a{color:#3b82f6!important}';
+        $css .= '.plugin-action-buttons a,.theme-actions a{color:#3b82f6!important}';
+
+        // Target post and page list tables
+        $css .= '.type-post .row-title,.type-page .row-title{color:#3b82f6!important}';
+        $css .= '.post-state,.post-count,.count{color:#3b82f6!important}';
+
+        // Target settings and option page links
+        $css .= '.form-table a,.option-site-visibility a{color:#3b82f6!important}';
+
+        // Target dashboard widgets
+        $css .= '#dashboard-widgets a,.activity-block a{color:#3b82f6!important}';
+        $css .= '.rss-widget a,.dashboard-comment-wrap a{color:#3b82f6!important}';
+
+        // Target subsubsub filter links
+        $css .= '.subsubsub a,.subsubsub .current{color:#3b82f6!important}';
+
+        // Target view and edit links
+        $css .= '.view a,.edit a,.delete a{color:#3b82f6!important}';
+
+        // Nuclear option - Override WordPress default link color globally
+        $css .= 'body.wp-admin a{color:#3b82f6!important}';
+        $css .= 'body.wp-admin a:hover{color:#ffffff!important}';
+        $css .= 'body.wp-admin .button-primary{background:#3b82f6!important;color:#ffffff!important}';
+
         // Minify the CSS (remove comments and extra whitespace)
         $css = preg_replace('#/\*.*?\*/#s', '', $css);
         $css = preg_replace('/\s*([{}|:;,])\s+/', '$1', $css);
@@ -178,5 +243,73 @@ class VSC_Color_Scheme {
 
         // Output the CSS
         printf('<style id="vsc-color-overrides-inline">%s</style>', wp_strip_all_tags($css));
+    }
+
+    /**
+     * Ultra-aggressive overrides injected at admin_footer with maximum priority
+     * This is the nuclear option to eliminate #53bfff
+     */
+    public function inject_aggressive_overrides() {
+        ?>
+        <style id="vsc-nuclear-color-fix">
+            /* ULTRA SPECIFIC TARGETING - Maximum specificity to override everything */
+            body.wp-admin a.row-title,
+            body.wp-admin .wp-list-table a.row-title,
+            body.wp-admin .wp-list-table tbody tr td a.row-title,
+            body.wp-admin table.wp-list-table a.row-title,
+            body.wp-admin table.widefat a.row-title,
+            body.wp-admin .widefat tbody tr td.column-title a.row-title {
+                color: #3b82f6 !important;
+            }
+
+            /* Target ALL links in wp-list-table with ultra-high specificity */
+            body.wp-admin table.wp-list-table tbody tr td a,
+            body.wp-admin table.wp-list-table tbody tr td a:link,
+            body.wp-admin table.wp-list-table tbody tr td a:visited {
+                color: #3b82f6 !important;
+            }
+
+            /* Hover states */
+            body.wp-admin table.wp-list-table tbody tr td a:hover,
+            body.wp-admin table.wp-list-table tbody tr td a:focus {
+                color: #ffffff !important;
+            }
+
+            /* Row actions specifically */
+            body.wp-admin .wp-list-table .row-actions a,
+            body.wp-admin .wp-list-table .row-actions span a,
+            body.wp-admin table.wp-list-table .row-actions a {
+                color: #3b82f6 !important;
+            }
+
+            /* Post/Page/Product titles */
+            body.wp-admin .type-post a.row-title,
+            body.wp-admin .type-page a.row-title,
+            body.wp-admin .type-product a.row-title,
+            body.wp-admin tr a.row-title {
+                color: #3b82f6 !important;
+            }
+
+            /* Plugin and theme titles */
+            body.wp-admin .plugin-title strong a,
+            body.wp-admin .theme-title a,
+            body.wp-admin tr .plugin-title a {
+                color: #3b82f6 !important;
+            }
+
+            /* All admin links - ultimate fallback */
+            body.wp-admin .wrap a:not(.button):not(.button-primary):not(.button-secondary),
+            body.wp-admin #wpbody-content a:not(.button):not(.button-primary):not(.button-secondary) {
+                color: #3b82f6 !important;
+            }
+
+            /* Fix any remaining inline styles */
+            body.wp-admin a[style*="color"],
+            body.wp-admin a[style*="color:#53bfff"],
+            body.wp-admin a[style*="color: #53bfff"] {
+                color: #3b82f6 !important;
+            }
+        </style>
+        <?php
     }
 }

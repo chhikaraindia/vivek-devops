@@ -21,9 +21,6 @@ class VSC_Snippets {
         // Register custom post type
         add_action('init', [$this, 'register_post_type'], 1);
 
-        // Register category taxonomy
-        add_action('init', [$this, 'register_taxonomy'], 1);
-
         // Admin menu
         add_action('admin_menu', [$this, 'admin_menu']);
 
@@ -99,41 +96,10 @@ class VSC_Snippets {
     }
 
     /**
-     * Register taxonomy for snippet categories
-     */
-    public function register_taxonomy() {
-        $labels = array(
-            'name'              => __('Snippet Categories', 'vivek-devops'),
-            'singular_name'     => __('Snippet Category', 'vivek-devops'),
-            'search_items'      => __('Search Categories', 'vivek-devops'),
-            'all_items'         => __('All Categories', 'vivek-devops'),
-            'parent_item'       => __('Parent Category', 'vivek-devops'),
-            'parent_item_colon' => __('Parent Category:', 'vivek-devops'),
-            'edit_item'         => __('Edit Category', 'vivek-devops'),
-            'update_item'       => __('Update Category', 'vivek-devops'),
-            'add_new_item'      => __('Add New Category', 'vivek-devops'),
-            'new_item_name'     => __('New Category Name', 'vivek-devops'),
-            'menu_name'         => __('Categories', 'vivek-devops'),
-        );
-
-        register_taxonomy('vsc_snippet_category', array('vsc_snippet'), array(
-            'hierarchical'      => true,
-            'labels'            => $labels,
-            'show_ui'           => true,
-            'show_admin_column' => true,
-            'query_var'         => true,
-            'show_in_rest'      => false,
-            'rewrite'           => false,
-        ));
-    }
-
-    /**
      * Add admin menu items under Vivek DevOps
      */
     public function admin_menu() {
-        global $submenu;
-
-        // Main Code Snippets menu item
+        // Main Code Snippets menu item - simple list/edit view only
         add_submenu_page(
             'vsc-dashboard',
             __('Code Snippets', 'vivek-devops'),
@@ -141,70 +107,6 @@ class VSC_Snippets {
             'manage_options',
             'edit.php?post_type=vsc_snippet'
         );
-
-        // Note: WordPress doesn't support nested submenus in the admin menu UI
-        // We'll create a custom menu structure that appears as a dropdown on hover
-        // This requires JavaScript to handle the interaction
-
-        // Store submenu items for JavaScript to use
-        $snippet_submenu = array(
-            array(
-                'title' => __('Add CSS', 'vivek-devops'),
-                'url'   => admin_url('post-new.php?post_type=vsc_snippet&language=css')
-            ),
-            array(
-                'title' => __('Add JS', 'vivek-devops'),
-                'url'   => admin_url('post-new.php?post_type=vsc_snippet&language=js')
-            ),
-            array(
-                'title' => __('Add HTML', 'vivek-devops'),
-                'url'   => admin_url('post-new.php?post_type=vsc_snippet&language=html')
-            ),
-            array(
-                'title' => __('Add PHP', 'vivek-devops'),
-                'url'   => admin_url('post-new.php?post_type=vsc_snippet&language=php')
-            ),
-            array(
-                'title' => __('Categories', 'vivek-devops'),
-                'url'   => admin_url('edit-tags.php?taxonomy=vsc_snippet_category&post_type=vsc_snippet')
-            ),
-        );
-
-        // Enqueue script to add submenu dropdown
-        add_action('admin_footer', function() use ($snippet_submenu) {
-            ?>
-            <script>
-            jQuery(document).ready(function($) {
-                // Find the Code Snippets menu item
-                var $codeSnippetsMenu = $('#adminmenu a[href="edit.php?post_type=vsc_snippet"]').parent();
-
-                if ($codeSnippetsMenu.length) {
-                    // Create submenu HTML
-                    var $submenu = $('<ul class="wp-submenu wp-submenu-wrap"></ul>');
-                    $submenu.append('<li class="wp-submenu-head" aria-hidden="true">Code Snippets</li>');
-
-                    <?php foreach ($snippet_submenu as $item): ?>
-                    $submenu.append('<li class="wp-first-item"><a href="<?php echo esc_js($item['url']); ?>" class="wp-first-item"><?php echo esc_js($item['title']); ?></a></li>');
-                    <?php endforeach; ?>
-
-                    // Add submenu to the menu item
-                    $codeSnippetsMenu.addClass('wp-has-submenu wp-not-current-submenu menu-top');
-                    $codeSnippetsMenu.append($submenu);
-                }
-            });
-            </script>
-            <style>
-            /* Make Code Snippets menu behave like other menus with submenus */
-            #adminmenu a[href="edit.php?post_type=vsc_snippet"] {
-                position: relative;
-            }
-            #adminmenu li.wp-has-submenu:hover .wp-submenu,
-            #adminmenu li.wp-has-submenu.opensub .wp-submenu {
-                display: block;
-            }
-            </style>
-            <?php
-        });
     }
 
     /**
@@ -578,9 +480,18 @@ class VSC_Snippets {
 
             case 'php':
                 // Execute PHP code - restricted to administrators with manage_options capability
-                add_action('init', function() use ($code) {
+                $snippet_id_for_action = $snippet_id;
+                add_action('init', function() use ($code, $snippet_id_for_action) {
                     if (current_user_can('manage_options')) {
-                        eval('?>' . $code);
+                        try {
+                            $result = eval('?>' . $code);
+                            if (false === $result && error_get_last()) {
+                                throw new Exception('Snippet execution failed');
+                            }
+                        } catch (Throwable $e) {
+                            update_post_meta($snippet_id_for_action, '_vsc_snippet_active', '0');
+                            error_log("VSC Panic: Snippet $snippet_id_for_action deactivated. Error: " . $e->getMessage());
+                        }
                     }
                 }, $priority);
                 break;
@@ -619,7 +530,15 @@ class VSC_Snippets {
             case 'php':
                 // Execute PHP code - restricted to administrators
                 if (current_user_can('manage_options')) {
-                    eval('?>' . $code);
+                    try {
+                        $result = eval('?>' . $code);
+                        if (false === $result && error_get_last()) {
+                            throw new Exception('Snippet execution failed');
+                        }
+                    } catch (Throwable $e) {
+                        update_post_meta($snippet_id, '_vsc_snippet_active', '0');
+                        error_log("VSC Panic: Snippet $snippet_id deactivated in shortcode. Error: " . $e->getMessage());
+                    }
                 }
                 break;
         }
